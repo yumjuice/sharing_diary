@@ -28,8 +28,8 @@ function add_diary(id,nickname,imgaddr,feeling,comment_count=0,date,title){
     description.innerHTML=date+" "+nickname
     article.setAttribute('id',id)
     image.setAttribute('src',imgaddr) 
-    titletag.setAttribute('href',"#") //제목 클릭시 이동 주소
-    imagelink.setAttribute('href',"#") ; //이미지 클릭시 이동 주소   
+    titletag.setAttribute('href',"diary_detail.html?id="+id) //제목 클릭시 이동 주소
+    imagelink.setAttribute('href',"diary_detail.html?id="+id) ; //이미지 클릭시 이동 주소   
     
     div.appendChild(imagelink);
     div.appendChild(image);
@@ -84,7 +84,7 @@ var page = 1;   //불러올 페이지
                 description.innerHTML="date username"
                 article.setAttribute('id',page*5+x)
                 image.setAttribute('src','images/background.jpg') 
-                title.setAttribute('href',"#") //제목 클릭시 이동 주소
+                title.setAttribute('href',"#"); //제목 클릭시 이동 주소
                 imagelink.setAttribute('href',"#") ; //이미지 클릭시 이동 주소   
                 
                 div.appendChild(imagelink);

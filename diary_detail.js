@@ -83,15 +83,14 @@ if ("commentList" in localStorage) {
 function add_comment(){
     var context=document.querySelector("#comment").value;
     let commentId=0;
+    let commentList=[];
     //로컬스토리지에 이미 댓글 리스트가 있을시
     if ("commentList" in localStorage) {
         let commentList=JSON.parse(localStorage.getItem("commentList"));
         commentId=commentList[commentList.length-1]["comment_id"]+1;
     }
     //없을시
-    else{
-        let commentList=[];
-    }
+    
    
 
     var comment={
@@ -108,3 +107,6 @@ function add_comment(){
 
 
 plus_btn.addEventListener("click",add_comment);
+cancel_btn.addEventListener('click',function(){
+    location.href="diaryList.html";
+})
