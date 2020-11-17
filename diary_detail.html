@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="diary_detail.css">
+        
+    </head>
+    <body>
+        <div class="container">
+            <div style="margin:10px;margin-left:600px;">
+                <button type="button" id="cancel_btn" class="btn"><img src="images/back.png" width="30" height="30"></button>
+            </div>
+            <div class="diary-container">
+                <div class="diary">
+                   
+                        <h3 id="title" style="margin:20px; ">제목:ㅇㅇ</h3>
+                        <p id="sub_title" style="text-align:right;margin:10px;margin-right:20px;">date 😄</p>
+                        <p id="context" style="margin:10px ; margin-left:20px;margin-right:20px;">내용</p>
+                    
+                   
+                </div>
+                <div class="comment-container">
+                    <img src="images/user.png" width=30 height=30 style="margin-top:15px;margin-left:10px;"><strong style="display: inline; margin-right:10px;">보라돌이</stong>
+                    <hr style="border:1px grey solid; margin:10px">
+                    <div class="comment-list">
+                        <div class="comment">
+                            <img src="images/user.png" width=30 height=30 style="margin-left:10px; "> 
+                            <strong style="margin-right:10px;display: inline;">보라돌이</strong>
+                            <p style="display:inline; font-weight: lighter;">우와아</p>
+                        </div>
+                    </div>
+                    <div class="comment-write">
+                        <input id="comment" style="display: inline;" type="text" placeholder="댓글 달기..">
+                        <button type="button" id="plus_btn" class="btn"><img src="images/plus1.png" width="25" height="25"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="diary_detail.js"></script>
+    </body>
+</html>

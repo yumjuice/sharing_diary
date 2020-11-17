@@ -1,0 +1,38 @@
+*{
+    margin:0;
+    padding:0;
+    
+    text-decoration: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    
+}
+
+body{
+    background-color: rgb(156, 156, 156);
+    
+}
+
+.write-container{
+    background-color:white;
+    height: 400px;
+    width:400px;
+    margin:0ox auto;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+    margin: 50px;
+   
+}
+#cancel_btn{
+    background-color: rgba( 255, 255, 255, 0 );
+    cursor: pointer;
+    border:0;
+    outline:0;
+  }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="write_diary_style.css">
+        
+    </head>
+    <body>
+        <div class="container">
+            <div>
+            <button type="button" id="cancel_btn"><img src="images/back.png" width="30" height="30"></button>
+            </div>
+            <div class="write-container">
+                <label>제목
+                    <input id='title' style="margin:10px;margin-top:20px" display="inline" type="text" placeholder="제목을 입력해주세요"/>
+                </label>
+                <br>
+                <div class="check-feeling" style="margin:10px">
+                    <label><input type="radio" name="feeling" value="😄">😄</label>
+                    <label><input type="radio" name="feeling" value="🤬">🤬</label>
+                    <label><input type="radio" name="feeling" value="😭">😭</label>
+                    <label><input type="radio" name="feeling" value="😨">😨</label>
+                </div>
+                <hr style="border: 1px solid; border-color: rgb(129, 129, 129); width:80%; margin-left:10%">
+                
+                <textarea style="margin:10px;" id="content" cols="40" rows="10" placeholder="내용을 입력해주세요" ></textarea>
+                <br>
+                <label>이미지 주소<input id='imgaddr' style="margin-left:10px;" type="text"></label>
+                <br>
+                <button style="float: right;margin:10px;margin-right:60px" type="button" id="write_btn">작성</button>
+            </div>
+        </div>
+        <script src="write_diary.js"></script>
+    </body>
+</html>

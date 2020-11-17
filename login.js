@@ -1,12 +1,12 @@
 const loginButton=document.querySelector("#login_button");
-const id=document.getElementById("roomId").getAttribute( 'value' );
-const pw=document.getElementById("roomPw").value;
-const nickname=document.getElementById("nickname").value;
+
 
 
 
 function login(){
-    //console.log(document.login_form.querySelector("div").roomId.value);
+    let id=document.getElementById("roomId").value;
+    let pw=document.getElementById("roomPw").value;
+    let nickname=document.getElementById("nickname").value;
     if(id!="1234"){
         console.log(id);
         alert("아이디가 틀렸습니다.");
