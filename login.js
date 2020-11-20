@@ -24,7 +24,7 @@ function login(){
     else{
      //  localStorage.setItem("roomId", id);
         localStorage.setItem("nickname", nickname);
-        location.href="mypage.html";
+        location.href="mainpage.html";
     }
 
 }

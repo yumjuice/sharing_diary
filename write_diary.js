@@ -1,5 +1,14 @@
 const write_btn= document.querySelector('#write_btn');
 const cancel_btn=document.querySelector('#cancel_btn');
+
+//room id가져오기
+function searchParam(key) {
+    return new URLSearchParams(location.search).get(key);
+  };
+
+
+const roomId=searchParam('roomId');
+
 function value_check() {
     var check_count = document.getElementsByName("feeling").length;
 
@@ -22,9 +31,16 @@ function add_diary(){
     
     ///****로컬 스토리지에 작성한 일기 데이터 저장
     let diaryId=0;
-    if ("diaryList" in localStorage) {
-        var diaryList=JSON.parse(localStorage.getItem("diaryList"));
-         diaryId=diaryList[0]["diary_id"]+1;
+   
+    let roomname="";
+    
+    if ("allDiaryList" in localStorage) {
+        var allDiaryList=JSON.parse(localStorage.getItem("allDiaryList"));
+         diaryId=allDiaryList[0]["diary_id"]+1;
+         var diaryList=JSON.parse(localStorage.getItem("diaryList"));
+         
+         roomname=diaryList[0]["roomName"]
+         
     }
     else{var diaryList=[];}
 
@@ -35,6 +51,8 @@ function add_diary(){
     console.log("date",date);
 
     var diary={
+        "room_id":roomId,
+        "room_name":roomname,
         "diary_id":diaryId,
         "date":date,
         "title":title,
@@ -46,14 +64,16 @@ function add_diary(){
 
     diaryList.unshift(diary);
     console.log(JSON.stringify(diaryList));
-    localStorage.setItem('dd',"Sdf");
+    allDiaryList.unshift(diary);
+    
     localStorage.setItem("diaryList",JSON.stringify(diaryList));
+    localStorage.setItem("allDiaryList",JSON.stringify(allDiaryList));
     //var x=JSON.parse(localStorage.getItem("diary"));
     alert("❤️일기가 작성되었습니다.❤️")
-    location.href="diaryList.html";
+    history.back();    
 }
 
 write_btn.addEventListener('click',add_diary)
 cancel_btn.addEventListener('click',function(){
-    location.href="diaryList.html";
+    location.href="diaryList.html?roomId="+roomId;
 })

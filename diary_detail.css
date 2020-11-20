@@ -4,7 +4,7 @@
     border:0;
     outline:0;
     text-decoration: none;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Jua', sans-serif;
     
 }
 body{
@@ -40,6 +40,10 @@ body{
     border-bottom-right-radius: 20px;
     
 }
+.slide_container{
+    display: flex;
+    flex-direction: row;
+}
 .container{
     display: flex;
     flex-direction: column;
@@ -55,6 +59,12 @@ body{
     border:0;
     outline:0;
   }
+
+.slide_btn{
+    
+    margin: 50px;
+    margin-top:200px;
+}
 
 #plus_btn{
     position: relative;
@@ -84,6 +94,16 @@ body{
     position: relative;
     top:8px;
     margin-right:5px;
+    
+}
+.heart_img{
+    width:30px; 
+    height:30px;
+    position: relative;
+    top:8px;
+    left:100px;
+    
+    cursor: pointer;
 }
 
 .user_text{

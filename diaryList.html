@@ -2,7 +2,7 @@
 <html lang="ko">
     <head>
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="diaryList_style.css">
         
     </head>
@@ -11,34 +11,33 @@
             
         </script>
         <div class="top_container">
-            <a href="mypage.html">
-                <img src="images/user.png">
+            <a href="mainpage.html">
+                <img src="images/Icon_Self_Line.png">
             </a>
             
             <span id="user_name"></span>
             
-            <a href="write_diary.html">
-                <img src="images/pencil.png">
-            </a>
-            <span>Write</span>
-            <button type="button" id="logout_btn"><img src="images/logout.png" width="30" height="30"></button>
-            <span>Logout</span>
+            <button type="button" id="write_btn"><img src="images/Icon_Write_Line.png" width="30" height="30"></button>
+            <span style="padding-right:40px;">글쓰기</span>
+            
+            <button type="button" id="logout_btn"><img src="images/Icon_LogOut.png" width="30" height="30"></button>
+            <span style="padding-right:40px;">로그아웃</span>
         </div>
 
         <div class="header_container">
             <div id="group_img">
-                <img src="images/group.png">
+                <img src="images/Pen_Logo.png">
             </div>
             <div>
                 <h1 id="roomName">인턴이들</h1>
-                <hr style="border-color: black;">
+                <hr style="border-color:rgb(218, 134, 146); background-color:rgb(218, 134, 146)">
                 <span>보라돌이, 뚜비, 나나, 뽀</span>
             </div>
         </div>
         <p class="checkbox">
            <input id="showMine" type="checkbox" style="margin-right:5px;">내가 쓴 글만 보기
          </p>
-        <hr style="border-color: black;margin:50px;margin-left:100px;margin-right:100px;">
+        <hr style="border-color: rgb(218, 134, 146);margin:50px;margin-left:100px;margin-right:100px;margin-top:100px">
         <div class="diary_list">
             <div class="grid-container">
 

@@ -2,33 +2,41 @@
 <html lang="ko">
     <head>
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="login_style.css">
         
     </head>
     <body>
-        
-        <h1>교환 일기</h1>
-        
-        <div class="login_form">
-            
-            <div>
-                <img src="images/group.png">
-                <input id="roomId" type="text" placeholder="그룹 아이디" value="1234">
-            </div>
-            <div >
-                <img src="images/key.png">
-                <input id="roomPw" type="password" placeholder="그룹 비밀번호" value="1234">
+        <div class="container">
+            <img src="images/logo.png">
+         
+            <div class="login_form">
                 
+                <div>
+                   
+                    <input style="margin-top : 25px;"class="input" id="roomId" type="text" placeholder="아이디">
+                </div>
+                <div >
+                   
+                    <input class="input" id="roomPw" type="password" placeholder="비밀번호">
+                    
+                </div>
+                <div>
+                  
+                    <input class="input" id="nickname" type="text" placeholder="닉네임">
+                </div>
+                <div>
+                   
+                    <input style="margin-top:15px"type="button" class="btn" onclick="location.href='join.html'" value="Sign up"></button>
+                </div>
+                <div>
+                    <input type="button" class="btn" id="login_button" value="Login"></button>
+                    
+                </div>
             </div>
-            <div>
-                <img src="images/user.png">
-                <input id="nickname" type="text" placeholder="닉네임" value="연주">
-            </div>
-            <div>
-                <input type="button" id="login_button" value="Login"></button>
-            </div>
+
         </div>
+        
 
         <script src="login.js"></script>
 
