@@ -2,8 +2,10 @@ const title=document.querySelector("#title");
 const sub_title=document.querySelector("#sub_title");
 const context=document.querySelector("#context");
 const cancel_btn=document.querySelector("#cancel_btn");
-const comment_list=document.querySelector(".comment_list");
+const comment_list=document.querySelector(".comment-list");
 const plus_btn=document.querySelector("#plus_btn");
+const writer=document.querySelector("#writer");
+const delete_btn=document.querySelector("#delete_btn");
 
 //다이어리 id가져오기
 function searchParam(key) {
@@ -27,9 +29,18 @@ function find_diary(id){
 
 let diary=find_diary(diary_id);
 
+
 title.innerHTML="제목 : "+diary["title"];
 sub_title.innerHTML=diary["date"]+" "+diary["feeling"];
 context.innerHTML=diary["context"];
+
+const nickname=diary["nickname"];
+
+if(nickname==localStorage.getItem("nickname")){
+    delete_btn.classList.remove('hide');
+}
+
+writer.innerHTML=nickname;
 
 cancel_btn.addEventListener('click',function(){
     location.href="diaryList.html";
@@ -56,10 +67,10 @@ function get_comment(comment){
     context.innerHTML=comment["context"];
 
     div.appendChild(img);
-    div.appendChild(strong);
     div.appendChild(name);
+    div.appendChild(context);
     
-    comment_list.prepend(div);
+    comment_list.append(div);
 
     
 }
@@ -86,11 +97,12 @@ function add_comment(){
     let commentList=[];
     //로컬스토리지에 이미 댓글 리스트가 있을시
     if ("commentList" in localStorage) {
-        let commentList=JSON.parse(localStorage.getItem("commentList"));
-        commentId=commentList[commentList.length-1]["comment_id"]+1;
+        console.log("잇");
+        commentList=JSON.parse(localStorage.getItem("commentList"));
+        commentId=commentList[0]["comment_id"]+1;
     }
     //없을시
-    
+    console.log(commentList);
    
 
     var comment={
@@ -100,8 +112,8 @@ function add_comment(){
         "context":context
 
     }
-    commentList.push(comment);
-    localStorage.setItem('commentList',commentList);
+    commentList.unshift(comment);
+    localStorage.setItem('commentList',JSON.stringify(commentList));
     location.reload()
 }
 
@@ -109,4 +121,25 @@ function add_comment(){
 plus_btn.addEventListener("click",add_comment);
 cancel_btn.addEventListener('click',function(){
     location.href="diaryList.html";
+})
+
+function deleteDiary(){
+    let diaryList=JSON.parse(localStorage.getItem("diaryList"));
+    newdiaryList=diaryList.filter(diary=>{
+        return diary["diary_id"]!=diary_id
+        //console.log(diary_id,diary["diary_id"]);
+
+    })
+    localStorage.setItem("diaryList",JSON.stringify(newdiaryList))
+}
+
+delete_btn.addEventListener("click",function(){
+    var confirm_delete = confirm("❗️ 정말 삭제하시겠습니까? ❗️");
+    if(confirm_delete == true){
+      deleteDiary();
+      location.href="diaryList.html";
+    }
+    else if(confirm_delete == false){
+      
+    }
 })

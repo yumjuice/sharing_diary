@@ -24,14 +24,21 @@ body{
     display: inline-block;
     background-color:rgb(255, 255, 255);
     width: 300px;
-    height:400px;
+    height:450px;
     border-right :1px solid grey;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 .comment-container{
     display:inline-block;
     background-color:rgb(255, 255, 255);
     width:300px;
-    height:400px;
+    height:450px;
+    display: flex;
+    flex-direction: column;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
 }
 .container{
     display: flex;
@@ -54,11 +61,13 @@ body{
     top:5px;
     left:5px;
 }
-
+.comment-list{
+    flex:4;
+}
 .comment-write{
-    position: relative;
-    top:60%;
+    flex:1;
     margin-left:20px;
+    margin-top:5px;
 }
 
 #comment{
@@ -69,9 +78,12 @@ body{
 }
 
 .user_img{
-    width:30; 
-    height:30;
+    width:30px; 
+    height:30px;
     margin-left:10px;
+    position: relative;
+    top:8px;
+    margin-right:5px;
 }
 
 .user_text{
@@ -82,4 +94,8 @@ body{
 .comment_text{
     display:inline; 
     font-weight: lighter;
+}
+
+.hide{
+    display:none;
 }

@@ -17,9 +17,19 @@ body{
     margin:20px;
     text-align: right;
 }
-.top_container > img{
+.top_container > img,.top_container>button>img,.top_container>a>img{
     width:30px;
     height:30px;
+    position: relative;
+    top:5px;
+    margin-left:10px;
+}
+.hide{
+  display: none;
+}
+.checkbox{
+  float:right;
+  margin-right:100px;
 }
 
 .header_container{
@@ -28,6 +38,12 @@ body{
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+#logout_btn{
+  background-color: rgba( 255, 255, 255, 0 );
+  cursor: pointer;
+  border:0;
+  outline:0;
 }
 
 #group_img > img{
@@ -51,20 +67,20 @@ img {
   
   
   /* hover styles */
-  .location-listing {
+  .article-listing {
     position: relative;
     margin:10px;
     border-radius: 20px;
     text-align: center;
   }
   
-  .location-image {
+  .article-image {
     line-height: 0;
     overflow: hidden;
     border-radius: 20px;
   }
   
-  .location-image img {
+  .article-image img {
     filter: blur(0px);
     transition: filter 0.3s ease-in;
     transform: scale(1.1);
@@ -72,20 +88,25 @@ img {
     height:300px;
    
   }
+
+  .description{
+    font-size: 20px;
+    font-weight: bold;
+  }
   
-  .location-title {
+  .article-title {
     font-size: 1.5em;
     font-weight: bold;
     text-decoration: none;
     z-index: 1;
     position: absolute;
-    height: 100%;
+    height: 300px;
     width: 100%;
     top: 0;
     left: 0;
     opacity: 0;
     transition: opacity .5s;
-    background: rgba(90,0,10,0.4);
+    background: rgba(66, 66, 66, 0.7);
     color: white;
     border-radius: 20px;
     /* position the text in t’ middle*/
@@ -94,11 +115,11 @@ img {
     justify-content: center;
   }
   
-  .location-listing:hover .location-title {
+  .article-listing:hover .article-title {
     opacity: 1;
   }
   
-  .location-listing:hover .location-image img {
+  .article-listing:hover .article-image img {
     filter: blur(2px);
   }
   .fadein

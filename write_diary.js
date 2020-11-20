@@ -24,10 +24,11 @@ function add_diary(){
     let diaryId=0;
     if ("diaryList" in localStorage) {
         var diaryList=JSON.parse(localStorage.getItem("diaryList"));
-         diaryId=diaryList[diaryList.length-1]["diary_id"]+1;
+         diaryId=diaryList[0]["diary_id"]+1;
     }
     else{var diaryList=[];}
 
+    console.log(diaryId);
 
     var d = new Date();
     var date=d.getFullYear()+"."+(d.getMonth()+1)+"."+d.getDate();
@@ -43,7 +44,9 @@ function add_diary(){
         "nickname":localStorage.getItem("nickname")
     }
 
-    diaryList.push(diary);
+    diaryList.unshift(diary);
+    console.log(JSON.stringify(diaryList));
+    localStorage.setItem('dd',"Sdf");
     localStorage.setItem("diaryList",JSON.stringify(diaryList));
     //var x=JSON.parse(localStorage.getItem("diary"));
     alert("❤️일기가 작성되었습니다.❤️")

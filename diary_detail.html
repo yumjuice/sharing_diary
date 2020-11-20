@@ -8,8 +8,10 @@
     </head>
     <body>
         <div class="container">
-            <div style="margin:10px;margin-left:600px;">
-                <button type="button" id="cancel_btn" class="btn"><img src="images/back.png" width="30" height="30"></button>
+            <div style="margin:10px;margin-left:550px;">
+                
+                <button type="button" id="delete_btn" class="btn hide"><img src="images/garbage.png" width="35" height="35"></button>
+                <button type="button" id="cancel_btn" class="btn"><img src="images/back.png" width="35" height="35"></button>
             </div>
             <div class="diary-container">
                 <div class="diary">
@@ -21,8 +23,8 @@
                    
                 </div>
                 <div class="comment-container">
-                    <img src="images/user.png" width=30 height=30 style="margin-top:15px;margin-left:10px;"><strong style="display: inline; margin-right:10px;">보라돌이</stong>
-                    <hr style="border:1px grey solid; margin:10px">
+                    <div><img src="images/user.png" width=30 height=30 style="margin-top:15px;" class="user_img"><strong id="writer" style="display: inline; margin-right:10px;">보라돌이</stong></div>
+                    <hr style="border:1px #b1b0b0 solid; margin:10px">
                     <div class="comment-list">
                         <!--
                         <div class="comment">

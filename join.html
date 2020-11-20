@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="join.css">
+        
+    </head>
+    <body>
+        <div class="container">
+            <h1>교환 일기</h1>
+          
+            <div class="join_form">
+                <p style="margin-left:20px; margin-top:10px">✨회원가입✨</p>
+                <div>
+                    <span>ID</span>
+                    <input id="id" type="text" placeholder="아이디" >
+                </div>
+                <div >
+                    <span>PW</span>
+                    <input id="pw" type="password" placeholder="비밀번호">
+                    
+                </div>
+                <div>
+                    <span>닉네임</span>
+                    <input id="nickname" type="text" placeholder="닉네임">
+                </div>
+                <div>
+                    <span style="margin-right:30px">성별</span>
+                    <label><input type="radio" name="gender" value="male">🧑</label>
+                    <label><input type="radio" name="gender" value="female">👩</label>
+                   
+                </div>
+                <div>
+                    <span>생년월일</span>
+                    <input id="birth" type="text" placeholder="YYYYMMDD">
+                </div>
+                <div>
+                    <input type="button" id="join_button" value="Join!"></button>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="join.js"></script>
+
+    </body>
+</html>
