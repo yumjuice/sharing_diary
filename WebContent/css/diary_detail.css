@@ -1,0 +1,122 @@
+*{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    text-decoration: none;
+    font-family: 'Jua', sans-serif;
+    
+}
+body{
+    background-color:black;
+    
+}
+
+.diary-container{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.diary{
+    display: inline-block;
+    background-color:rgb(255, 255, 255);
+    width: 300px;
+    height:450px;
+    border-right :1px solid grey;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.comment-container{
+    display:inline-block;
+    background-color:rgb(255, 255, 255);
+    width:300px;
+    height:450px;
+    display: flex;
+    flex-direction: column;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
+}
+.slide_container{
+    display: flex;
+    flex-direction: row;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin:50px;
+   
+}
+
+.btn{
+    background-color: rgba( 255, 255, 255, 0 );
+    cursor: pointer;
+    border:0;
+    outline:0;
+  }
+
+.slide_btn{
+    
+    margin: 50px;
+    margin-top:200px;
+}
+
+#plus_btn{
+    position: relative;
+    top:-5px;
+    left:5px;
+
+}
+.comment-list{
+    flex:4;
+}
+.comment-write{
+    flex:1;
+    margin-left:20px;
+    
+}
+
+#comment{
+    border: 2px solid grey;
+    border-radius: 20px;
+    opacity: 0.8;
+    width:70%;
+}
+
+.user_img{
+    width:30px; 
+    height:30px;
+    margin-left:10px;
+    position: relative;
+    top:8px;
+    margin-right:5px;
+    
+}
+.heart_img{
+    width:30px; 
+    height:30px;
+    position: relative;
+    top:8px;
+    left:100px;
+    
+    cursor: pointer;
+}
+
+.user_text{
+    margin-right:10px;
+    display: inline;
+}
+
+.comment_text{
+    display:inline; 
+    font-weight: lighter;
+}
+
+.hide{
+    display:none;
+}

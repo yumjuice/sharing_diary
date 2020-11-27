@@ -1,0 +1,51 @@
+*{
+    margin:0;
+    padding:0;
+    
+    text-decoration: none;
+    font-family: 'Jua', sans-serif;
+    
+}
+
+body{
+    background-color:black;
+    
+}
+
+.write-container{
+    background-color:white;
+    height: 400px;
+    width:400px;
+    margin:0ox auto;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+    margin: 50px;
+   
+}
+#cancel_btn{
+    background-color: rgba( 255, 255, 255, 0 );
+    cursor: pointer;
+    border:0;
+    outline:0;
+    margin-left:400px;
+}
+
+#write_btn{
+    border:0;
+    margin : 3px;
+   background-color: rgb(239,137,152);
+   border-radius: 5px;
+   cursor: pointer;
+   padding:10px;
+   color: white;
+   width:50px;
+   
+}
