@@ -32,7 +32,7 @@
                     
                 </div>
                 <div>
-                    <span>닉네임</span>
+                    <span>이름</span>
                     <input id="nickname" type="text" name="user_name" placeholder="닉네임">
                 </div>
                 <div>

@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.RoomDAO;
 import vo.RoomVO;
@@ -14,9 +15,29 @@ public class RoomService {
 	public static RoomService getInstance() {
 		return service;
 	}
-	
+	//해당 유저가 참여하는 방 리스트
 	public ArrayList<RoomVO> getRoomList(String user_id){
 		ArrayList<RoomVO> list = dao.getRoomList(user_id);
 		return list;
+	}
+	
+	//방정보
+	public RoomVO getRoom(int room_id) {
+		RoomVO room=dao.getRoom(room_id);
+		return room;
+	}
+	//방추가
+	public void addRoom(String user_id, RoomVO room,List<String> userList) {
+		int room_id=dao.getLastId()+1;
+		System.out.println("roomID"+room_id);
+		room.setRoom_id(room_id);
+		dao.addRoom(room, user_id);
+		dao.addRoomUser(room, userList, user_id);
+
+	}
+	//방에 해당 유저가 참여하는지 확인
+	public boolean checkUserInRoom(int room_id,String user_id) {
+		
+		return dao.checkUserInRoom(room_id, user_id);
 	}
 }

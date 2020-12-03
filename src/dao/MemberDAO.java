@@ -22,6 +22,8 @@ public class MemberDAO {
 	public Connection connect() {
 		Connection conn = null;
 		try {
+			//Class.forName("com.mysql.cj.jdbc.Driver");
+	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
 			Class.forName("org.mariadb.jdbc.Driver");
 	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
 			
@@ -67,13 +69,15 @@ public class MemberDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("insert into USER values(?,?,?,?,?,?)");
+			pstmt = conn.prepareStatement("insert into USER values(?,?,?,?,?,?,'y',?,NOW(),?,NOW());");
 			pstmt.setString(1, member.getUser_id());
 			pstmt.setString(2, member.getUser_pw());
 			pstmt.setString(3, member.getUser_name());
 			pstmt.setString(4, member.getUser_birth());
 			pstmt.setString(5, member.getUser_gender());
 			pstmt.setString(6, member.getUser_email());
+			pstmt.setString(7, member.getUser_id());
+			pstmt.setString(8, member.getUser_id());
 			pstmt.executeUpdate();
 		} catch (Exception ex) {
 			System.out.println("회원가입오류 : " + ex);
@@ -93,7 +97,7 @@ public class MemberDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from USER where user_id=?");
+			pstmt = conn.prepareStatement("select * from USER where user_id=? and use_yn='y'");
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -118,7 +122,7 @@ public class MemberDAO {
 	
 		//해당 id의 유저VO 반환
 		public MemberVO getUser(String id) {
-			MemberVO member=new MemberVO();
+			MemberVO member=null;
 			Connection conn = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -126,7 +130,7 @@ public class MemberDAO {
 
 			try {
 				conn = connect();
-				pstmt = conn.prepareStatement("select * from USER where user_id=?");
+				pstmt = conn.prepareStatement("select * from USER where user_id=? and use_yn='y'");
 				pstmt.setString(1, id);
 				rs = pstmt.executeQuery();
 				if (rs.next()) {
@@ -166,7 +170,7 @@ public class MemberDAO {
 
 			try {
 				conn = connect();
-				pstmt = conn.prepareStatement("select * from USER where user_id in(select user_id from roomuser where room_id=?)");
+				pstmt = conn.prepareStatement("select * from USER where USER.use_yn='y' AND user_id in(select user_id from ROOMUSER where room_id=? AND ROOMUSER.use_yn='y')");
 				pstmt.setInt(1, room_id);
 				rs = pstmt.executeQuery();
 				while (rs.next()) {

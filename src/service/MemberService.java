@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.MemberDAO;
 
@@ -38,13 +39,20 @@ public class MemberService {
 		MemberVO member=dao.getUser(user_id);
 		return member;
 	}
+	
+	//모든 사람들이 회원인지 확인
+	public boolean checkUserList(List<String> ids) {
+		for (int i=0;i<ids.size();i++) {
+			if(dao.getUser(ids.get(i))==null) {
+				return false;
+			}
+		}
+		return true;
+	}
 /*
 	public void memberDelete(String id) {
 		dao.memberDelete(id);
 	}
 
-	public ArrayList<MemberVO> memberList() {
-		ArrayList<MemberVO> list = dao.memberList();
-		return list;
-	}*/
+*/
 }

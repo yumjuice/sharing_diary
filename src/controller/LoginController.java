@@ -34,7 +34,7 @@ public class LoginController implements Controller {
         	
     	    httpSession.setAttribute("id", id);
     	    
-    	    res.sendRedirect("main.jsp");
+    	    res.sendRedirect("main.do");
      	}else if(result==0) {//비밀번호 틀림
      		req.setAttribute("alert", "비밀번호가 틀렸습니다.");
      		HttpUtil.forward(req, res, "/index.jsp");

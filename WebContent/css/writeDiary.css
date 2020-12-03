@@ -1,7 +1,7 @@
 *{
     margin:0;
     padding:0;
-    
+    font-size:28px;
     text-decoration: none;
     font-family: 'Jua', sans-serif;
     
@@ -14,8 +14,8 @@ body{
 
 .write-container{
     background-color:white;
-    height: 400px;
-    width:400px;
+   height: auto;
+    width: auto;
     margin:0ox auto;
     text-align: center;
     border-radius: 20px;
@@ -46,6 +46,7 @@ body{
    cursor: pointer;
    padding:10px;
    color: white;
-   width:50px;
+  padding-left:20px;
+  padding-right:20px;
    
 }

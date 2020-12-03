@@ -23,6 +23,8 @@ public class DiaryDAO {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
+			//Class.forName("com.mysql.cj.jdbc.Driver");
+	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
 			
 		} catch (Exception ex) {
 			System.out.println("오류발생: " + ex);
@@ -70,11 +72,12 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from DIARY where diary_id=?");
+			pstmt = conn.prepareStatement("select * from DIARY inner join USER on USER.user_id=DIARY.writer_id inner join ROOMINFO on DIARY.room_id=ROOMINFO.room_id where DIARY.diary_id=? and DIARY.use_yn='y';");
 			pstmt.setInt(1, diary_id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				
+				diary.setRoom_name(rs.getString("room_name"));
+				diary.setWriter_name(rs.getString("user_name"));
 				diary.setDiary_id(rs.getInt("diary_id"));
 				diary.setContext(rs.getString("context"));
 				diary.setDate(rs.getString("date"));
@@ -104,12 +107,21 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select COUNT(*) from DIARY where room_id IN (select room_id from ROOMUSER WHERE user_id=?)");
+			pstmt = conn.prepareStatement("select COUNT(*) from DIARY where DIARY.use_yn='y' AND room_id IN (select room_id from ROOMUSER WHERE user_id=?)");
 			pstmt.setString(1, user_id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				
 				page= rs.getInt(1);
+				if(page==0) {
+					
+				}
+				else if(page%6==0) {
+					page=page/6;
+				}else {
+					page=page/6+1;
+				}
+				
 				
 			}
 
@@ -120,11 +132,6 @@ public class DiaryDAO {
 			close(conn, pstmt, rs);
 		}
 		
-		if(page%6==0) {
-			page=page/6;
-		}else {
-			page=page/6+1;
-		}
 		
 		return page;
 		
@@ -141,13 +148,13 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from diary inner join user on user.user_id=diary.writer_id where room_id=?;");
+			pstmt = conn.prepareStatement("select * from DIARY inner join USER on USER.user_id=DIARY.writer_id where room_id=? and DIARY.use_yn='y' order by DIARY.create_time desc;");
 			pstmt.setInt(1, room_id);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				diary=new DiaryVO();
 				diary.setContext(rs.getString("context"));
-				diary.setDate(rs.getString(10));
+				diary.setDate(rs.getString("date"));
 				diary.setDiary_id(rs.getInt("diary_id"));
 				diary.setFeeling(rs.getString("feeling"));
 				diary.setImgaddr(rs.getString("img"));
@@ -180,14 +187,14 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from diary inner join user on user.user_id=diary.writer_id inner join roominfo on diary.room_id=roominfo.room_id where diary.room_id in(select room_id from roomuser WHERE user_id=?) order by diary.create_time desc LIMIT ?, 6;");
+			pstmt = conn.prepareStatement("select * from DIARY inner join USER on USER.user_id=DIARY.writer_id inner join ROOMINFO on DIARY.room_id=ROOMINFO.room_id where DIARY.use_yn='y' AND DIARY.room_id in(select room_id from ROOMUSER WHERE user_id=?) order by DIARY.create_time desc LIMIT ?, 6;");
 			pstmt.setString(1, user_id);
 			pstmt.setInt(2, (page-1)*6);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				diary=new DiaryVO();
 				diary.setContext(rs.getString("context"));
-				diary.setDate(rs.getString(10));
+				diary.setDate(rs.getString("date"));
 				diary.setDiary_id(rs.getInt("diary_id"));
 				diary.setFeeling(rs.getString("feeling"));
 				diary.setImgaddr(rs.getString("img"));
@@ -209,5 +216,68 @@ public class DiaryDAO {
 		}
 		return list;
 		
+	}
+	public void addDiary(DiaryVO diary) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("INSERT INTO DIARY (room_id, writer_id, title, feeling, context, img , use_yn, creator, create_time, modifier,modify_time, date) values (?,?, ?,?, ?, ?, 'y',? ,NOW(),?,NOW(),?);");
+			pstmt.setInt(1, diary.getRoom_id());
+			pstmt.setString(2, diary.getWriter_id());
+			pstmt.setString(3, diary.getTitle());
+			pstmt.setString(4, diary.getFeeling());
+			pstmt.setString(5, diary.getContext());
+			pstmt.setString(6, diary.getImgaddr());
+			pstmt.setString(7, diary.getWriter_id());
+			pstmt.setString(8, diary.getWriter_id());
+			pstmt.setString(9, diary.getDate());
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("DiaryDAO-> addDiary오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	public void delteDiary(DiaryVO diary,String user_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE DIARY SET use_yn = 'n',modifier = ?,modify_time=NOW() WHERE diary_id = ?;");
+			
+			pstmt.setString(1, user_id);
+			pstmt.setInt(2, diary.getDiary_id());
+		
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("DiaryDAO-> deleteDiary오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	public void updateDiary(DiaryVO diary) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE DIARY SET title=?,feeling=?,context=?,img=?,modifier = ?,modify_time=NOW() WHERE diary_id = ?;");
+			pstmt.setString(1, diary.getTitle());
+			pstmt.setString(2, diary.getFeeling());
+			pstmt.setString(3, diary.getContext());
+			pstmt.setString(4, diary.getImgaddr());
+			pstmt.setString(5, diary.getWriter_id());
+			pstmt.setInt(6, diary.getDiary_id());
+			
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("DiaryDAO-> updateDiary오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
 	}
 }

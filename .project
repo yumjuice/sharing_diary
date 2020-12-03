@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>sharingDiary2</name>
+	<name>SharedDiary</name>
 	<comment></comment>
 	<projects>
 		<project>gson-2.2.1</project>

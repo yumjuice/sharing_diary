@@ -1,7 +1,10 @@
 eclipse.preferences.version=1
+encoding//src/controller/AddRoomController.java=UTF-8
+encoding//src/controller/DiaryWriteController.java=UTF-8
 encoding//src/controller/JoinController.java=UTF-8
 encoding//src/controller/LoginController.java=UTF-8
+encoding//src/dao/CommentDAO.java=UTF-8
 encoding//src/dao/DiaryDAO.java=UTF-8
+encoding//src/dao/LikeDAO.java=UTF-8
 encoding//src/dao/MemberDAO.java=UTF-8
 encoding//src/dao/RoomDAO.java=UTF-8
-encoding//src/diary/DiaryDAO.java=UTF-8

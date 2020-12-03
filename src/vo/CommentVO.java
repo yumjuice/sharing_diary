@@ -3,10 +3,10 @@ package vo;
 public class CommentVO {
 
 	private int comment_id;
-	private String user_id;
+	private String writer_id;
 	private int diary_id;
 	private String comment_context;
-	private String date;
+	private String writer_name;
 	
 	public int getComment_id() {
 		return comment_id;
@@ -14,11 +14,11 @@ public class CommentVO {
 	public void setComment_id(int comment_id) {
 		this.comment_id = comment_id;
 	}
-	public String getUser_id() {
-		return user_id;
+	public String getWriter_id() {
+		return writer_id;
 	}
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setWriter_id(String writer_id) {
+		this.writer_id = writer_id;
 	}
 	public int getDiary_id() {
 		return diary_id;
@@ -32,10 +32,13 @@ public class CommentVO {
 	public void setComment_context(String comment_context) {
 		this.comment_context = comment_context;
 	}
-	public String getDate() {
-		return date;
+	public String getWriter_name() {
+		return writer_name;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setWriter_name(String writer_name) {
+		this.writer_name = writer_name;
 	}
+	
+	
+	
 }
