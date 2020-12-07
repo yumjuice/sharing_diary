@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -15,7 +16,6 @@ import vo.MemberVO;
 import service.DiaryService;
 import vo.DiaryVO;
 import service.RoomService;
-import user.User;
 import vo.RoomVO;
 import com.google.gson.*;
 

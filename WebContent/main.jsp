@@ -109,21 +109,29 @@
 		</div>
 
 		<div class="room-container">
-			<p id="room_name">
-				❤️<%=user_name%>님의 방❤️
-			</p>
+			<div style="margin-top:10px;">
+				<p id="room_name" style="display:inline;">
+					❤️<%=user_name%>님의 방❤️
+				</p>
+				<button type="button" id="plus_btn" data-toggle="modal"
+					data-target="#makeRoom">
+					<img src="images/plus1.png" width="25" height="25">
+				</button>
+			</div>
 			<hr style="margin-bottom: 10px;">
-			<button type="button" id="plus_btn" data-toggle="modal"
-				data-target="#makeRoom">
-				<img src="images/plus1.png" width="25" height="25">
-			</button>
+			
 			<%
 				for (int i = 0; i < room_list.size(); i++) {
 			%>
 
 			<div style="cursor: pointer;"
 				onclick="location.href='diaryList.do?roomId=<%=room_list.get(i).getRoom_id()%>'">
-				<img class="room_img" src="images/Icon_Self_Line.png"> <span><%=room_list.get(i).getRoom_name()%></span>
+				<%if (room_list.get(i).getMaster_id().equals(userVO.getUser_id())){ %>
+					<img class="room_img" src="images/fullheart.png">
+				<%}else{%> 
+					<img class="room_img" src="images/Icon_Self_Line.png">
+				<%} %>
+				<span><%=room_list.get(i).getRoom_name()%></span>
 
 			</div>
 
@@ -266,13 +274,11 @@
         $.ajax({
             url: 'main.do?page=' + current_page,
             type: 'get',
-
             success: function(diary_list) {
                 diary_list.forEach(diary => {
-      
-                   add_diary(diary["room_id"], diary["room_name"], diary["diary_id"], diary["writer_name"], diary["imgaddr"], diary["feeling"], diary["date"], diary["title"], diary["context"]);
+      	          add_diary(diary["room_id"], diary["room_name"], diary["diary_id"], diary["writer_name"], diary["imgaddr"], diary["feeling"], diary["date"], diary["title"], diary["context"]);
                 })
-                loading = false; //실행 가능 상태로 변경
+            	loading = false; //실행 가능 상태로 변경
                 current_page++;
             }
         })
@@ -298,19 +304,19 @@
     const addBtn = document.querySelector("#addInvite");
     var invites = new Set();
 
-    function invite() {
-        var friend = document.querySelector("#friend")
+    function addFriend(friend) {
+        //var friend = document.querySelector("#friend")
         var li = document.createElement('li');
         var div = document.createElement('div');
         //<button type="button" id="addInvite"><img src="images/plus1.png" width="25" height="25"></button>
         var button = document.createElement('button');
         var img = document.createElement('img');
 
-        friend.setAttribute('value', "")
+        
         button.classList.add("removeBtn");
         button.setAttribute('type', 'button');
-        li.innerHTML = friend.value;
-        li.setAttribute('value', friend.value);
+        li.innerHTML = friend;
+        li.setAttribute('value', friend);
         li.setAttribute('style', 'display:inline;');
         img.setAttribute('src', "images/back.png");
         img.setAttribute('width', '15');
@@ -322,9 +328,26 @@
         div.appendChild(button);
 
         inviteList.appendChild(div);
-        invites.add(friend.value);
+        invites.add(friend);
 
 
+    }
+    function invite(){
+    	 var friend = document.querySelector("#friend")
+    	 //아이디가 존재하는지 확인
+    	 $.ajax({
+            url: 'checkuser.do?id=' + friend.value,
+            type: 'get',
+            success: function(result) {
+                if(result==true){
+                	addFriend(friend.value);
+                	friend.setAttribute('value', "")
+                }else{
+                	alert("유효하지 않은 아이디입니다.");
+                }
+            }
+        })
+    	 
     }
     addBtn.addEventListener('click', invite);
 

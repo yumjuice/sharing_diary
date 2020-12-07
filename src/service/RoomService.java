@@ -35,6 +35,13 @@ public class RoomService {
 		dao.addRoomUser(room, userList, user_id);
 
 	}
+	//방수정
+		public void updateRoom(String user_id, RoomVO room,List<String> userList) {
+			dao.updateRoom(room, user_id);
+			dao.updateRoomUser(room, userList, user_id);
+
+		}
+		
 	//방에 해당 유저가 참여하는지 확인
 	public boolean checkUserInRoom(int room_id,String user_id) {
 		

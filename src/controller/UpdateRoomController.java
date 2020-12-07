@@ -11,16 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import service.MemberService;
+import service.DiaryService;
 import service.RoomService;
+import vo.DiaryVO;
 import vo.RoomVO;
 
-public class AddRoomController  implements Controller {
+public class UpdateRoomController implements Controller {
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
         res.setContentType("text/html; charset=utf-8");
 
-      //id ÏÑ∏ÏÖòÍ∞ÄÏ†∏Ïò§Í∏∞
+        //id ººº«∞°¡Æø¿±‚
         HttpSession httpSession = req.getSession();
         String user_id=(String)httpSession.getAttribute("id");
 	   
@@ -28,20 +29,19 @@ public class AddRoomController  implements Controller {
 	    	res.sendRedirect("index.jsp");
 	    }
 	    
-	    //Ïú†Ìö®ÏÑ± Í≤ÄÏÇ¨
+	  //¿Ø»øº∫ ∞ÀªÁ
+	    String room_id = req.getParameter("room_id");
         String room_name = req.getParameter("room_name");
 		String room_img = req.getParameter("room_img");
 		String inviteList =req.getParameter("inviteList");
 		
 		System.out.println(inviteList+"DDd");
 		
-		if ( room_name==null || room_name.isEmpty() || room_img==null || inviteList==null) {
+		if ( room_name==null || room_name.isEmpty() || room_img==null || inviteList==null ||room_id==null ||room_id.isEmpty()) {
 		
 			res.sendRedirect("main.do");
 			return;
 		}
-		
-		
 		
 		List<String> friendlist=new ArrayList<String>();
 		friendlist=Arrays.asList(inviteList.split(","));
@@ -49,14 +49,15 @@ public class AddRoomController  implements Controller {
 		RoomVO room = new RoomVO();
 		room.setRoom_name(room_name);
 		room.setRoom_img(room_img);
+		room.setRoom_id(Integer.parseInt(room_id));
 		RoomService roomservice = RoomService.getInstance();
-		roomservice.addRoom(user_id, room, friendlist);
+		roomservice.updateRoom(user_id, room, friendlist);
+		
 		PrintWriter writer =res.getWriter(); 
-			   
-		writer.println("<script>alert('Î∞©Ïù¥ ÏÉùÏÑ±ÎêòÏóàÏäµÎãàÎã§.');location.href='main.do'</script>");
+		   
+		writer.println("<script>alert('πÊ¿Ã ª˝º∫µ«æ˙Ω¿¥œ¥Ÿ.');location.href='main.do'</script>");
 		     
 		writer.close();
-		
 		
 	}
 

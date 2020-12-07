@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,7 +80,7 @@ public class RoomDAO {
 				room.setRoom_id(rs.getInt("room_id"));
 				room.setRoom_img(rs.getString("room_img"));
 				room.setRoom_name(rs.getString("room_name"));
-				
+				room.setMaster_id(rs.getString("master_id"));
 				list.add(room);
 				
 			}
@@ -110,6 +111,7 @@ public class RoomDAO {
 					room.setRoom_id(rs.getInt("room_id"));
 					room.setRoom_img(rs.getString("room_img"));
 					room.setRoom_name(rs.getString("room_name"));
+					room.setMaster_id(rs.getString("master_id"));
 					
 				}
 
@@ -161,12 +163,13 @@ public class RoomDAO {
 		
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("INSERT INTO ROOMINFO (room_id, room_name ,room_img, use_yn,creator,create_time,modifier,modify_time) values (?,?,?, 'y',?, NOW(), ?, NOW());");
+			pstmt = conn.prepareStatement("INSERT INTO ROOMINFO (room_id, room_name ,room_img, use_yn,creator,create_time,modifier,modify_time,master_id) values (?,?,?, 'y',?, NOW(), ?, NOW(),?);");
 			pstmt.setInt(1, room.getRoom_id());
 			pstmt.setString(2, room.getRoom_name());
 			pstmt.setString(3, room.getRoom_img());
 			pstmt.setString(4, user_id);
 			pstmt.setString(5, user_id);
+			pstmt.setString(6, user_id);
 			pstmt.executeUpdate();
 			
 		} catch (Exception ex) {
@@ -175,6 +178,26 @@ public class RoomDAO {
 			close(conn, pstmt);
 		}
 	
+	}
+	
+	public void updateRoom(RoomVO room,String user_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE ROOMINFO SET room_name=? ,room_img=?, modifier=?,modify_time=NOW();");
+			
+			pstmt.setString(1, room.getRoom_name());
+			pstmt.setString(2, room.getRoom_img());
+			pstmt.setString(3, user_id);
+			pstmt.executeUpdate();
+			
+		} catch (Exception ex) {
+			System.out.println("RoomDAO-> UPDATERoom오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
 	}
 	
 	//방과 참여자들 추가

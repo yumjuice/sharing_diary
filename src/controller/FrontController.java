@@ -35,6 +35,8 @@ public class FrontController extends HttpServlet {
 		list.put("/changelike.do", new ChangeLikeController());
 		list.put("/editdiary.do", new EditPageController());
 		list.put("/updatediary.do", new EditDiaryController());
+		list.put("/checkuser.do",new IdCheckController());
+		list.put("/updateRoom.do",new UpdateRoomController());
 	}
 
 	@Override

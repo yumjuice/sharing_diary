@@ -41,12 +41,12 @@ public class MemberService {
 	}
 	
 	//모든 사람들이 회원인지 확인
-	public boolean checkUserList(List<String> ids) {
-		for (int i=0;i<ids.size();i++) {
-			if(dao.getUser(ids.get(i))==null) {
+	public boolean checkUserExist(String id) {
+		
+		if(dao.getUser(id)==null) {
 				return false;
-			}
 		}
+		
 		return true;
 	}
 /*

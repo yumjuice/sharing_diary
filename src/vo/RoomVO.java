@@ -4,6 +4,13 @@ public class RoomVO {
 	private int room_id;
 	private String room_name;
 	private String room_img;
+	private String master_id;
+	public String getMaster_id() {
+		return master_id;
+	}
+	public void setMaster_id(String master_id) {
+		this.master_id = master_id;
+	}
 	public int getRoom_id() {
 		return room_id;
 	}

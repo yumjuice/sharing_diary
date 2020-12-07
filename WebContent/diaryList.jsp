@@ -61,7 +61,11 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 
 
     <div>
-        <h1 id="roomName"><%=room_name %></h1>
+        <h1 id="roomName" style="display:inline"><%=room_name %></h1>
+        <button type="button" id="setting_btn" data-toggle="modal" data-target="#settingRoom">
+					<img src="images/plus1.png" width="25" height="25">
+		</button>
+    
         <hr style="border-color:rgb(218, 134, 146); background-color:rgb(218, 134, 146)">
         <span>
             <%for (int i=0;i<user_list.size();i++){
@@ -90,19 +94,78 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
     </div>
 </div>
 
+<!-- Modal -->
+	<div class="modal fade" id="settingRoom" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">방 정보</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="updateRoom.do" method="POST" onSubmit="check()">
+					<input type="hidden" name="inviteList" id="hiddenList" value="dddd" />
+					<input type="hidden" name="room_id" value="<%=roomVO.getRoom_id()%>" />
+					<div class="modal-body">
+						<div>
+							<span>방 이름</span> <input type="text" name="room_name" value="<%=room_name %>">
+						</div>
+						<div>
+							<span>방 이미지 주소</span> <input type="text" name="room_img" value="<%=roomVO.getRoom_img()%>">
+						</div>
+						<div>
+							<span>친구 추가</span> <input type="text" id="friend"
+								onFocus="this.value='';return true;">
+							<button type="button" class="hideBtn" id="addInvite">
+								<img src="images/plus1.png" width="25" height="25">
+							</button>
+						</div>
+						<ol id="inviteList">
+							<%for (int i=0;i<user_list.size();i++){%>
+                				<div value="<%=user_list.get(i).getUser_id()%>">
+                					<button class="removeBtn"><img src="images/back.png" style="width:15;height:15"/></button>
+                					<li style="display:inline"><%=user_list.get(i).getUser_id() %></li>
+                				</div>
+   					        <% }%>
+						</ol>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="submit" class="btn"
+							style="background-color: rgb(239, 137, 152);">수정하기</button>
+						<button type="submit" class="btn"
+							style="background-color: rgb(239, 137, 152);">삭제하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 <script>
-    //출력한 다이어리 갯수/ 일단 6개만 출력
+	const setting_btn=document.querySelector("#setting_btn");
+	const grid = document.querySelector(".grid-container");
+	const checkBox = document.querySelector("#showMine");
+    
+	//출력한 다이어리 갯수/ 일단 6개만 출력
     var count = 0;
 
-
-    const grid = document.querySelector(".grid-container");
-
-    const checkBox = document.querySelector("#showMine");
-
     let check = false; //내가 작성한 글만 보기 체크=true
+
+    <%
+    if (!roomVO.getMaster_id().equals(userVO.getUser_id())){%>
+    	setting_btn.classList.add('none');
+   <%}%>
+    
+    
     //방에 해당하는 다이어리 리스트 가져오기
-    var diaryList = [] <%
-         ArrayList < DiaryVO > diaryList1 = (ArrayList < DiaryVO > ) request.getAttribute("diaryList");
+    var diaryList = [] 
+    <%
+    ArrayList < DiaryVO > diaryList1 = (ArrayList < DiaryVO > ) request.getAttribute("diaryList");
     for (int i = 0; i < diaryList1.size(); i++) {
         DiaryVO diary = diaryList1.get(i); %>
         var diary = {
@@ -116,8 +179,6 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         }
         diaryList.push(diary); 
     <%} %>
-
-
 
 
 
@@ -204,8 +265,6 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         for (var x = count; x < count + 6; x++) {
             if (count >= diaryList.length) return;
             add_diary(diaryList[x]["diary_id"], diaryList[x]["writer_id"], diaryList[x]["writer_name"], diaryList[x]["imgaddr"], diaryList[x]["feeling"], 0, diaryList[x]["date"], diaryList[x]["title"]);
-
-
             count++; //다이어리 갯수 증가
         }
 
@@ -278,6 +337,92 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 
 
     checkBox.addEventListener('click', showOnlyMine)
+    
+    
+    
+    //*************방 수정하기 *************
+    const inviteList = document.querySelector("#inviteList");
+    const addFriendBtn = document.querySelector("#addInvite");
+   	const removeFriendBtn= document.querySelector("#removeBtn");
+   	
+   	var invites = new Set();
+   	<%for (int i=0;i<user_list.size();i++){%>
+		invites.add(user_list.get(i).getUser_id());
+   <% }%>
+   	
+   	
+   	//친구추가
+   	function addFriend(String friend){
+   	//var friend = document.querySelector("#friend")
+        var li = document.createElement('li');
+        var div = document.createElement('div');
+        //<button type="button" id="addInvite"><img src="images/plus1.png" width="25" height="25"></button>
+        var button = document.createElement('button');
+        var img = document.createElement('img');
+
+        
+        button.classList.add("removeBtn");
+        button.setAttribute('type', 'button');
+        li.innerHTML = friend;
+        div.setAttribute('value', friend);
+        li.setAttribute('style', 'display:inline;');
+        img.setAttribute('src', "images/back.png");
+        img.setAttribute('width', '15');
+        img.setAttribute('height', '15');
+
+
+        button.appendChild(img);
+        div.appendChild(li);
+        div.appendChild(button);
+
+        inviteList.appendChild(div);
+        invites.add(friend);
+   	
+   		
+   	}
+   	
+   	//추가버튼클릭시
+    function invite(){
+   	 var friend = document.querySelector("#friend")
+   	 //아이디가 존재하는지 확인
+   	 $.ajax({
+           url: 'checkuser.do?id=' + friend.value,
+           type: 'get',
+           success: function(result) {
+               if(result==true){
+               	addFriend(friend.value);
+               	friend.setAttribute('value', "")
+               }else{
+               	alert("유효하지 않은 아이디입니다.");
+               }
+           }
+       })
+   	 
+   }
+    
+   	//친구삭제
+   	function removeFriend(event){
+   		const removeDiv=event.target.parentNode;
+   		const removeFreind=removeDiv.value;
+   		
+   		var confirm_delete = confirm("❗",removeFriend, "님을 정말 삭제하시겠습니까? ❗️");
+	    if(confirm_delete == true){
+	    	inviteList.removeChild(div);
+	   		invites.delete(removeFriend);	
+	   
+	    }
+   		
+   		
+   	}
+  ///방 수정하기 전 hidden value에 넣기
+    function check() {
+
+        var list = Array.from(invites);
+       $("#hiddenList").val(list);
+    }
+   	
+   	addFriendBtn.addEventListener('click',addFriend,false);
+   	removeFriendBtn.addEventListener('click',removeFriend,false);
 </script>
 
 </body>
