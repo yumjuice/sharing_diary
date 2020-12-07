@@ -33,29 +33,32 @@ public class UpdateRoomController implements Controller {
 	    String room_id = req.getParameter("room_id");
         String room_name = req.getParameter("room_name");
 		String room_img = req.getParameter("room_img");
-		String inviteList =req.getParameter("inviteList");
+		String addFriend =req.getParameter("addFriendList");
+		String removeFriend =req.getParameter("removeFriendList");
 		
-		System.out.println(inviteList+"DDd");
+
 		
-		if ( room_name==null || room_name.isEmpty() || room_img==null || inviteList==null ||room_id==null ||room_id.isEmpty()) {
+		if ( room_name==null || room_name.isEmpty() || room_img==null || removeFriend==null ||room_id==null ||room_id.isEmpty()|| addFriend==null) {
 		
 			res.sendRedirect("main.do");
 			return;
 		}
 		
-		List<String> friendlist=new ArrayList<String>();
-		friendlist=Arrays.asList(inviteList.split(","));
+		List<String> addFriendList=new ArrayList<String>();
+		addFriendList=Arrays.asList(addFriend.split(","));
+		List<String> removeFriendList=new ArrayList<String>();
+		removeFriendList=Arrays.asList(removeFriend.split(","));
 		
 		RoomVO room = new RoomVO();
 		room.setRoom_name(room_name);
 		room.setRoom_img(room_img);
 		room.setRoom_id(Integer.parseInt(room_id));
 		RoomService roomservice = RoomService.getInstance();
-		roomservice.updateRoom(user_id, room, friendlist);
+		roomservice.updateRoom(user_id, room, addFriendList,removeFriendList);
 		
 		PrintWriter writer =res.getWriter(); 
 		   
-		writer.println("<script>alert('방이 생성되었습니다.');location.href='main.do'</script>");
+		writer.println("<script>alert('방이 수정되었습니다.');location.href='diaryList.do?roomId="+room_id+"';</script>");
 		     
 		writer.close();
 		

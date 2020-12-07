@@ -9,9 +9,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
- <link rel="preconnect" href="https://fonts.gstatic.com">
- <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+	crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/diaryList.css">
           <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -100,14 +103,15 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">방 정보</h5>
+					<h5 class="modal-title" id="exampleModalLabel">방 정보 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form action="updateRoom.do" method="POST" onSubmit="check()">
-					<input type="hidden" name="inviteList" id="hiddenList" value="dddd" />
+				<form action="updateRoom.do" method="POST" onSubmit="addHiddenValue()">
+					<input type="hidden" name="addFriendList" id="addFriendList" value="dddd" />
+					<input type="hidden" name="removeFriendList" id="removeFriendList" value="dddd" />
 					<input type="hidden" name="room_id" value="<%=roomVO.getRoom_id()%>" />
 					<div class="modal-body">
 						<div>
@@ -120,14 +124,17 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 							<span>친구 추가</span> <input type="text" id="friend"
 								onFocus="this.value='';return true;">
 							<button type="button" class="hideBtn" id="addInvite">
-								<img src="images/plus1.png" width="25" height="25">
+								<img src="images/plus1.png" style="width:25px;height:25px;">
 							</button>
 						</div>
 						<ol id="inviteList">
-							<%for (int i=0;i<user_list.size();i++){%>
+							<%for (int i=0;i<user_list.size();i++){
+								if(roomVO.getMaster_id().equals(user_list.get(i).getUser_id()))
+									continue;
+							%>
                 				<div value="<%=user_list.get(i).getUser_id()%>">
-                					<button class="removeBtn"><img src="images/back.png" style="width:15;height:15"/></button>
                 					<li style="display:inline"><%=user_list.get(i).getUser_id() %></li>
+                					<button type="button" class="removeBtn"><img src="images/back.png" style="width:15px;height:15px"/></button>
                 				</div>
    					        <% }%>
 						</ol>
@@ -135,7 +142,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
+							data-dismiss="modal">취소</button>
 						<button type="submit" class="btn"
 							style="background-color: rgb(239, 137, 152);">수정하기</button>
 						<button type="submit" class="btn"
@@ -151,16 +158,16 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 	const grid = document.querySelector(".grid-container");
 	const checkBox = document.querySelector("#showMine");
     
+	<%
+	if (!roomVO.getMaster_id().equals(userVO.getUser_id())){%>
+	    setting_btn.classList.add('none');
+	<%}%>
+	
 	//출력한 다이어리 갯수/ 일단 6개만 출력
     var count = 0;
 
     let check = false; //내가 작성한 글만 보기 체크=true
-
-    <%
-    if (!roomVO.getMaster_id().equals(userVO.getUser_id())){%>
-    	setting_btn.classList.add('none');
-   <%}%>
-    
+  
     
     //방에 해당하는 다이어리 리스트 가져오기
     var diaryList = [] 
@@ -343,16 +350,13 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
     //*************방 수정하기 *************
     const inviteList = document.querySelector("#inviteList");
     const addFriendBtn = document.querySelector("#addInvite");
-   	const removeFriendBtn= document.querySelector("#removeBtn");
+   	///const removeFriendBtns= document.querySelectorAll(".removeBtn");
    	
-   	var invites = new Set();
-   	<%for (int i=0;i<user_list.size();i++){%>
-		invites.add(user_list.get(i).getUser_id());
-   <% }%>
-   	
+   	var addInvites = new Set();
+   	var removeInvites=new Set();
    	
    	//친구추가
-   	function addFriend(String friend){
+   	function addFriend(friend){
    	//var friend = document.querySelector("#friend")
         var li = document.createElement('li');
         var div = document.createElement('div');
@@ -367,8 +371,8 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         div.setAttribute('value', friend);
         li.setAttribute('style', 'display:inline;');
         img.setAttribute('src', "images/back.png");
-        img.setAttribute('width', '15');
-        img.setAttribute('height', '15');
+        img.setAttribute('style', 'width:15px;height:15px');
+        
 
 
         button.appendChild(img);
@@ -376,7 +380,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         div.appendChild(button);
 
         inviteList.appendChild(div);
-        invites.add(friend);
+        addInvites.add(friend);
    	
    		
    	}
@@ -384,11 +388,13 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    	//추가버튼클릭시
     function invite(){
    	 var friend = document.querySelector("#friend")
+   	 
    	 //아이디가 존재하는지 확인
    	 $.ajax({
            url: 'checkuser.do?id=' + friend.value,
            type: 'get',
            success: function(result) {
+        	   console.log("result",result);
                if(result==true){
                	addFriend(friend.value);
                	friend.setAttribute('value', "")
@@ -400,30 +406,43 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    	 
    }
     
-   	//친구삭제
+   	//친구삭제버튼클릭시
    	function removeFriend(event){
-   		const removeDiv=event.target.parentNode;
-   		const removeFreind=removeDiv.value;
    		
-   		var confirm_delete = confirm("❗",removeFriend, "님을 정말 삭제하시겠습니까? ❗️");
+   		const removeDiv=event.target.parentNode.parentNode;
+   		const removeFriend=removeDiv.getAttribute('value');
+   		
+   		var confirm_delete = confirm("❗"+removeFriend+"님을 정말 삭제하시겠습니까? ❗️");
 	    if(confirm_delete == true){
-	    	inviteList.removeChild(div);
-	   		invites.delete(removeFriend);	
+	    	inviteList.removeChild(removeDiv);
+	   		if(addInvites.has(removeFriend)){
+	   			addInvites.delete(removeFriend);	
+	   		}else{
+	   			removeInvites.add(removeFriend);
+	   		}
+	   			
 	   
 	    }
    		
    		
    	}
-  ///방 수정하기 전 hidden value에 넣기
-    function check() {
+  	///방 수정하기 전 hidden value에 넣기
+    function addHiddenValue() {
 
-        var list = Array.from(invites);
-       $("#hiddenList").val(list);
+       var addlist = Array.from(addInvites);
+       $("#addFriendList").val(addlist);
+       var removelist = Array.from(removeInvites);
+       $("#removeFriendList").val(removelist);
     }
    	
-   	addFriendBtn.addEventListener('click',addFriend,false);
-   	removeFriendBtn.addEventListener('click',removeFriend,false);
+   	addFriendBtn.addEventListener('click',invite,false);
+   	//removeFriendBtn.addEventListener('click',removeFriend,false);
+   	$(document).on("click",".removeBtn",removeFriend);
+  	
+   	
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
 
 </body>
 
