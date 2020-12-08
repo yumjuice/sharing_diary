@@ -63,6 +63,7 @@ public class RoomDAO {
 		}
 	} // close
 	
+	//사용자가 참여하는 방 리스트 반환
 	public ArrayList<RoomVO> getRoomList(String user_id){
 		ArrayList<RoomVO> list=new ArrayList<RoomVO>();
 		Connection conn = null;
@@ -93,6 +94,8 @@ public class RoomDAO {
 		}
 		return list;
 	}
+	
+	//방 정보반환
 	public RoomVO getRoom(int room_id) {
 		
 			RoomVO room=new RoomVO();
@@ -179,7 +182,7 @@ public class RoomDAO {
 		}
 	
 	}
-	
+	//방수정
 	public void updateRoom(RoomVO room,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -200,7 +203,7 @@ public class RoomDAO {
 		}
 	}
 	
-	//방과 참여자들 추가
+	////방과 참여자들 추가
 	public void addRoomUser(RoomVO room,List<String> userList,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -233,32 +236,34 @@ public class RoomDAO {
 		}
 	}
 	
-	//방과 참여자들 추가
-		public void addUser(RoomVO room,List<String> userList,String user_id) {
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			System.out.println(userList);
-			System.out.println(user_id);
+	
+	//이미 만들어진 방에 참여자들만 추가
+	public void addUser(RoomVO room,List<String> userList,String user_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		System.out.println(userList);
+		System.out.println(user_id);
 		
-			try {
-				conn = connect();
+		try {
+			conn = connect();
 				
-				for(int i=0;i<userList.size();i++) {
-					pstmt = conn.prepareStatement("INSERT INTO ROOMUSER values (?,?, 'y',?, NOW(), ?, NOW());");
-					pstmt.setInt(1, room.getRoom_id());
-					pstmt.setString(2, userList.get(i));
-					pstmt.setString(3, user_id);
-					pstmt.setString(4, user_id);
-					pstmt.executeUpdate();
-				}
-				
-			} catch (Exception ex) {
-				System.out.println("RoomDAO-> addRoomUser오류 : " + ex);
-			} finally {
-				close(conn, pstmt);
+			for(int i=0;i<userList.size();i++) {
+				pstmt = conn.prepareStatement("INSERT INTO ROOMUSER values (?,?, 'y',?, NOW(), ?, NOW());");
+				pstmt.setInt(1, room.getRoom_id());
+				pstmt.setString(2, userList.get(i));
+				pstmt.setString(3, user_id);
+				pstmt.setString(4, user_id);
+				pstmt.executeUpdate();
 			}
+				
+		} catch (Exception ex) {
+			System.out.println("RoomDAO-> addRoomUser오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
 		}
-		
+	}
+	 
+	//방에 유저가 있는지 확인
 	public boolean checkUserInRoom(int room_id,String user_id) {
 		boolean isUserInRoom=false;
 		Connection conn = null;
@@ -285,6 +290,7 @@ public class RoomDAO {
 		return isUserInRoom;
 	}
 
+	//방에서 삭제된 유저 다시 초대 
 	public void reAddRoomUser(RoomVO room,String friend,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -304,6 +310,7 @@ public class RoomDAO {
 		}
 	}
 	
+	//방에서 유저 삭제
 	public void removeRoomUser(RoomVO room,List<String> userList,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

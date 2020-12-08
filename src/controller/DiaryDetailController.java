@@ -65,11 +65,14 @@ public class DiaryDetailController  implements Controller {
      		LikeService likeservice =LikeService.getInstance();
      		boolean isLike=likeservice.isLike(user_id, diary_id);
      		
+     		String master_id=roomservice.getRoom(room_id).getMaster_id();
+     		
      		req.setAttribute("diary", diaryVO);
      		req.setAttribute("user", memberVO);
      		req.setAttribute("page", page);
      		req.setAttribute("commentList", commentList);
      		req.setAttribute("like", isLike);
+     		req.setAttribute("master_id", master_id);
     		HttpUtil.forward(req, res, "/diaryDetail.jsp");
      	}else { //권한없음
      		PrintWriter writer =res.getWriter(); 

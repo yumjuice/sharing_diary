@@ -158,12 +158,13 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 	const grid = document.querySelector(".grid-container");
 	const checkBox = document.querySelector("#showMine");
     
+	//방장만 방수정아이콘이 보이게
 	<%
 	if (!roomVO.getMaster_id().equals(userVO.getUser_id())){%>
 	    setting_btn.classList.add('none');
 	<%}%>
 	
-	//출력한 다이어리 갯수/ 일단 6개만 출력
+	//출력한 다이어리 갯수
     var count = 0;
 
     let check = false; //내가 작성한 글만 보기 체크=true

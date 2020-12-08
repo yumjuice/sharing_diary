@@ -166,6 +166,8 @@
 		if("<%=user.getUser_id()%>"=="<%=diary.getWriter_id()%>" ){
     		delete_btn.classList.remove('hide');
     		edit_btn.classList.remove('hide');
+		}else if("<%=user.getUser_id()%>"=="${master_id}"){
+			delete_btn.classList.remove('hide');
 		}
 		
 		delete_btn.addEventListener("click",function(){
