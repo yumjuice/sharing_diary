@@ -1,10 +1,13 @@
 package service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import dao.RoomDAO;
 import vo.RoomVO;
+import vo.DiaryVO;
+import vo.MemberVO;
 
 public class RoomService {
 	private static RoomService service = new RoomService();
@@ -42,7 +45,7 @@ public class RoomService {
 		List<String> newFriendList=new ArrayList<String>();
 		for (int i=0;i<addFriendList.size();i++) {
 			//이미 존재했던 사람이면
-			if(dao.checkUserInRoom(room.getRoom_id(), addFriendList.get(i))) {
+			if(dao.checkUserExistsRoom(room.getRoom_id(), addFriendList.get(i))) {
 				dao.reAddRoomUser(room, addFriendList.get(i),user_id);
 			}else {
 				newFriendList.add(addFriendList.get(i));
@@ -50,15 +53,27 @@ public class RoomService {
 		}
 		if(!newFriendList.isEmpty()) {
 		dao.addUser(room,newFriendList, user_id);
-		System.out.println("newFriendlist");}
+		System.out.println("newFriendList");
+		System.out.println(newFriendList);}
 		if(!removeFriendList.isEmpty()) {
-			System.out.println("rmoveFriendlist");
-			dao.removeRoomUser(room,removeFriendList,user_id);	}
+			System.out.println("rmoveFriendlist"+removeFriendList);
+			dao.removeRoomUser(room.getRoom_id(),removeFriendList,user_id);	}
 	}
 		
 	//방에 해당 유저가 참여하는지 확인
 	public boolean checkUserInRoom(int room_id,String user_id) {
 		
 		return dao.checkUserInRoom(room_id, user_id);
+	}
+	
+	//방삭제
+	public void deleteRoom(String user_id,int room_id,ArrayList<MemberVO> memberList) {
+		dao.deleteRoom(user_id,room_id);
+		List<String> userList=new ArrayList<String>();
+		for(int i=0;i<memberList.size();i++) {
+			userList.add(memberList.get(i).getUser_id());
+		}
+		dao.removeRoomUser(room_id, userList, user_id);
+
 	}
 }

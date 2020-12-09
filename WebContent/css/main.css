@@ -62,7 +62,7 @@ input{
     
       margin-right:10px;
       position: relative;
-      top:8px;
+     
       
   }
 
@@ -189,4 +189,6 @@ input{
     border:0;
     outline:0;
   }
+  
+ .hideBtn:focus { outline:none; }
   

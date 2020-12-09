@@ -22,10 +22,10 @@ public class MemberDAO {
 	public Connection connect() {
 		Connection conn = null;
 		try {
-			//Class.forName("com.mysql.cj.jdbc.Driver");
-	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
-			Class.forName("org.mariadb.jdbc.Driver");
-	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+	        conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
+			//Class.forName("org.mariadb.jdbc.Driver");
+	        //conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
 			
 		} catch (Exception ex) {
 			System.out.println("오류발생: " + ex);
@@ -121,77 +121,101 @@ public class MemberDAO {
 	
 	
 		//해당 id의 유저VO 반환
-		public MemberVO getUser(String id) {
-			MemberVO member=null;
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
+	public MemberVO getUser(String id) {
+		MemberVO member=null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		
 
-			try {
-				conn = connect();
-				pstmt = conn.prepareStatement("select * from USER where user_id=? and use_yn='y'");
-				pstmt.setString(1, id);
-				rs = pstmt.executeQuery();
-				if (rs.next()) {
-					member = new MemberVO();
-					member.setUser_id(rs.getString(1));
-					member.setUser_pw(rs.getString(2));
-					member.setUser_name(rs.getString(3));
-					member.setUser_birth(rs.getString(4));
-					member.setUser_gender(rs.getString(5));
-					member.setUser_email(rs.getString(6));
-				}
-
-			} catch (Exception ex) {
-				System.out.println("getUser()오류 : " + ex);
-			
-			} finally {
-				close(conn, pstmt, rs);
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select * from USER where user_id=? and use_yn='y'");
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				member = new MemberVO();
+				member.setUser_id(rs.getString(1));
+				member.setUser_pw(rs.getString(2));
+				member.setUser_name(rs.getString(3));
+				member.setUser_birth(rs.getString(4));
+				member.setUser_gender(rs.getString(5));
+				member.setUser_email(rs.getString(6));
 			}
+
+		} catch (Exception ex) {
+			System.out.println("getUser()오류 : " + ex);
 			
-			
-			return member;
-			 
-			 
+		} finally {
+			close(conn, pstmt, rs);
 		}
+			
+			
+		return member;
+			 
+			 
+	}
 	
 		
 	//////방id넣으면 참여중인 유저 객체 출력
-		public ArrayList<MemberVO> getMemberList(int room_id) {
+	public ArrayList<MemberVO> getMemberList(int room_id) {
 
-			ArrayList<MemberVO> list = new ArrayList<MemberVO>();
+		ArrayList<MemberVO> list = new ArrayList<MemberVO>();
 
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-			MemberVO member = null;
+		MemberVO member = null;
 
-			try {
-				conn = connect();
-				pstmt = conn.prepareStatement("select * from USER where USER.use_yn='y' AND user_id in(select user_id from ROOMUSER where room_id=? AND ROOMUSER.use_yn='y')");
-				pstmt.setInt(1, room_id);
-				rs = pstmt.executeQuery();
-				while (rs.next()) {
-					member = new MemberVO();
-					member.setUser_id(rs.getString(1));
-					member.setUser_pw(rs.getString(2));
-					member.setUser_name(rs.getString(3));
-					member.setUser_birth(rs.getString(4));
-					member.setUser_gender(rs.getString(5));
-					member.setUser_email(rs.getString(6));
-					list.add(member);
-				}
-
-			} catch (Exception ex) {
-				System.out.println("memberList() 오류: " + ex);
-			} finally {
-				close(conn, pstmt, rs);
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select * from USER where USER.use_yn='y' AND user_id in(select user_id from ROOMUSER where room_id=? AND ROOMUSER.use_yn='y')");
+			pstmt.setInt(1, room_id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				member = new MemberVO();
+				member.setUser_id(rs.getString(1));
+				member.setUser_pw(rs.getString(2));
+				member.setUser_name(rs.getString(3));
+				member.setUser_birth(rs.getString(4));
+				member.setUser_gender(rs.getString(5));
+				member.setUser_email(rs.getString(6));
+				list.add(member);
 			}
 
-			return list;
+		} catch (Exception ex) {
+			System.out.println("memberList() 오류: " + ex);
+		} finally {
+			close(conn, pstmt, rs);
 		}
+
+		return list;
+	}
+		
+	public void updateMember(MemberVO member) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE USER SET user_name=? ,user_birth=?,user_gender=?,user_email=? ,modifier=?,modify_time=NOW() where user_id=?;");
+				pstmt.setString(1, member.getUser_name());
+				pstmt.setString(2, member.getUser_birth());
+				pstmt.setString(3, member.getUser_gender());
+				pstmt.setString(4, member.getUser_email());
+				pstmt.setString(5, member.getUser_id());
+				pstmt.setString(6, member.getUser_id());
+
+				pstmt.executeUpdate();
+			} catch (Exception ex) {
+				System.out.println("MemberDAO->updateMember오류 : " + ex);
+			} finally {
+				close(conn, pstmt);
+			}
+		}
+		
+		
 }
 
 

@@ -9,15 +9,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet"
+<!-- <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-	crossorigin="anonymous">
+	crossorigin="anonymous"> -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/main.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
 </head>
 <body>
 
@@ -89,7 +89,7 @@
 										<input type="hidden" name="page" value="main"/>
 									</form>
 									<h3 class="title_text">
-										제목 : &nbsp;<%=diary.getTitle()%></h3>
+										<%=diary.getTitle()%></h3>
 									<p class="sub_title_text"><%=diary.getDate()%>
 										&nbsp;
 										<%=feeling%></p>
@@ -229,7 +229,7 @@
         diary.setAttribute('onclick', 'location.href="diarydetail.do?room_id=' + room_id + '&diary_id=' + diary_id + '&page=main"');
         img.setAttribute('src', imgaddr);
         p.innerHTML = "🏠" + roomname + "🏠 " + nickname;
-        title_text.innerHTML = "제목: " + title1;
+        title_text.innerHTML = title1;
         sub_title.innerHTML = date + " " + feeling;
         context_text.innerHTML = context;
 
@@ -366,7 +366,6 @@
     }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
 </body>
 </html>

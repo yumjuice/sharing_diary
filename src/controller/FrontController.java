@@ -26,8 +26,8 @@ public class FrontController extends HttpServlet {
 		list.put("/main.do", new MainPageController());
 		list.put("/diaryList.do", new DiaryListController());
 		list.put("/addRoom.do", new AddRoomController());
-		list.put("/login.do", new LoginController());
-		list.put("/user.do", new JoinController());
+		
+		//list.put("/user.do", new JoinController());
 		list.put("/writediary.do", new DiaryWriteController());
 		list.put("/diarydetail.do",new DiaryDetailController());
 		list.put("/deletediary.do", new DeleteDiaryController());
@@ -37,6 +37,7 @@ public class FrontController extends HttpServlet {
 		list.put("/updatediary.do", new EditDiaryController());
 		list.put("/checkuser.do",new IdCheckController());
 		list.put("/updateRoom.do",new UpdateRoomController());
+		list.put("/user.do",new UserController());
 	}
 
 	@Override

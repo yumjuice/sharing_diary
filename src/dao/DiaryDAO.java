@@ -241,7 +241,7 @@ public class DiaryDAO {
 		}
 	}
 	
-	public void delteDiary(DiaryVO diary,String user_id) {
+	public void deleteDiary(DiaryVO diary,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -272,6 +272,24 @@ public class DiaryDAO {
 			pstmt.setString(4, diary.getImgaddr());
 			pstmt.setString(5, diary.getWriter_id());
 			pstmt.setInt(6, diary.getDiary_id());
+			
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("DiaryDAO-> updateDiary오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	public void deleteDiaryList(int room_id,String user_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE DIARY SET use_yn='n',modifier = ?,modify_time=NOW() WHERE room_id = ?;");
+			pstmt.setString(1, user_id);
+			pstmt.setInt(2, room_id);
 			
 			pstmt.executeUpdate();
 		} catch (Exception ex) {

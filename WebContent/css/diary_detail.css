@@ -19,13 +19,14 @@ body{
     justify-content: center;
     align-items: center;
     width: 800px;
+    height:520px;
 }
 
 .diary{
     display: inline-block;
     background-color:rgb(255, 255, 255);
     width: 80%;
-    height:600px;
+    height:100%;
     border-right :1px solid grey;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -34,7 +35,7 @@ body{
     display:inline-block;
     background-color:rgb(255, 255, 255);
     width:400px;
-    height:600px;
+    height:100%;
     display: flex;
     flex-direction: column;
     border-top-right-radius: 20px;
@@ -120,4 +121,19 @@ body{
 
 .hide{
     display:none;
+}
+.comment{
+	width: 300px;
+	display: inline-block;
+  	text-overflow: ellipsis;
+  	overflow: hidden;
+  	white-space: nowrap;
+}
+
+
+.comment.open{
+	width: 300px;
+  	overflow: visible;
+ 	white-space: normal;
+ 	word-break: break-all;
 }

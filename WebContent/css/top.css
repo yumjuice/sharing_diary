@@ -41,9 +41,69 @@ html, body {
   }
   
   .top_container>button{
-    margin-right:30px;
+    
     background-color: rgba( 255, 255, 255, 0 );
     cursor: pointer;
     border:0;
     outline:0;
   }
+  
+  .profile-menu {
+  width: 150px;
+  background:white;
+  border: 2px solid rgb(225, 221, 221);
+  border-radius: 5px;
+   position: fixed;
+  top: 60px;
+  left: 65%;
+  transform: translateX(250px);
+  z-index: 20;
+}
+
+li{
+	width:100%;
+	padding : 10px;	
+	text-align:center;
+	color:black;
+	font-weight:bold;
+}
+li:hover{
+	background-color: rgb(225, 221, 221);
+	cursor:pointer;
+}
+.hide{
+	display:none;
+}
+ .profile_container{
+ 	display:flex;
+ 	flex-direction: row;
+    justify-content: center;
+ 	
+ }
+ 
+ .profile_name{
+ 	flex:1;
+ 	text-align: right;
+ 	font-size: larger;
+    font-weight: bold;
+ }
+ .profile_name>div{
+ 	margin:20px;
+ 	height: 30px;
+ }
+ .profile_text{
+   font-size: larger;
+   flex: 2;
+   margin-right: 50px;
+ }
+ 
+ .profile_text>input{
+ 	margin:10px;
+ 	 color: black;
+ 	border: 2px;
+    border-color: rgb(239,137,152);
+    border-style: solid;
+    border-radius:5px;
+    height: 30px;
+ }
+ 

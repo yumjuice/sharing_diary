@@ -110,7 +110,7 @@
 								style="margin-left: 10px; position: relative; top: 7px;">
 							<strong
 								style="margin-right: 10px; display: inline; margin-left: 10px;"><%=commentlist.get(i).getWriter_name()%></strong>
-							<p style="display: inline; font-weight: lighter;"><%=commentlist.get(i).getComment_context()%></p>
+							<p class="comment-text" style="display: inline; font-weight: lighter;cursor: default;"><%=commentlist.get(i).getComment_context()%></p>
 
 						</div>
 
@@ -120,7 +120,7 @@
 						<!-- ------------------------- -->
 						<!-- -------댓글 작성---------- -->
 					</div>
-					<form action="addcomment.do" method="POST">
+					<form action="addcomment.do" method="POST" onsubmit="return checkValue();">
 						<div class="comment-write">
 							<input type="hidden" name="diary_id" value="<%=diary.getDiary_id()%>"/>
 							<input type="hidden" name="room_id" value="<%=diary.getRoom_id()%>"/>
@@ -128,7 +128,7 @@
 							<input name="comment_context" id="comment"
 								style="display: inline; position: relative; top: -10px;"
 								type="text" placeholder="댓글 달기..">
-							<button type="submit" id="plus_btn" class="btn">
+							<button type="submit" id="plus_btn" class="btn" >
 								<img src="images/plus1.png" width="25" height="25">
 							</button>
 						</div>
@@ -229,8 +229,25 @@
 		heart_img.addEventListener('click', change_heart);
 	
 		
+		/////***댓글 길게보기
+		const pTags=document.querySelectorAll('.comment-text');
 		
+		[].forEach.call(pTags,function(pTag){ 
+			pTag.addEventListener("click",function(e){
+				console.log(e.target);
+				e.target.parentNode.classList.toggle('open');
+			}); 
+		});
+
 		
+		//댓글 작성 값유무확인
+		function checkValue(){			
+			if(!$('#comment').val()){
+			
+				return false;
+			}
+			return true;
+		}
 		
 	</script>
 </body>

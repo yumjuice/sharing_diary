@@ -60,10 +60,13 @@ public class DiaryService {
 		dao.addDiary(diary);
 	}
 	
-	public void delteDiary(DiaryVO diary,String user_id) {
-		dao.delteDiary(diary,user_id);
+	public void deleteDiary(DiaryVO diary,String user_id) {
+		dao.deleteDiary(diary,user_id);
 	}
 	public void updateDiary(DiaryVO diary) {
 		dao.updateDiary(diary);
+	}
+	public void deleteDiaryList(int room_id,String user_id) {
+		dao.deleteDiaryList(room_id,user_id);
 	}
 }

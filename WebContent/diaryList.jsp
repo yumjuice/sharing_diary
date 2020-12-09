@@ -64,7 +64,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 
 
     <div>
-        <h1 id="roomName" style="display:inline"><%=room_name %></h1>
+        <h1 id="roomName" style="display:inline;position:relative;top:10px;""><%=room_name %></h1>
         <button type="button" id="setting_btn" data-toggle="modal" data-target="#settingRoom">
 					<img src="images/plus1.png" width="25" height="25">
 		</button>
@@ -86,7 +86,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         <input id="showMine" type="checkbox" style="margin-right:5px;">내가 쓴 글만 보기
     </span>
     <button type="button" id="write_btn" onclick="location.href='writeDiary.jsp?room_id=<%=roomVO.getRoom_id()%>'"><img src="images/Icon_Write_Line.png"></button>
-    <span style="padding-right:40px;position:relative;top:-12px;">글쓰기</span>
+    <span style="padding-right:40px;position:relative;top:-2px;">글쓰기</span>
 </div>
 <hr style="color:rgb(218, 134, 146); background-color:rgb(218, 134, 146);margin-left:100px;margin-right:100px;">
 <div class="diary_list">
@@ -109,7 +109,8 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form action="updateRoom.do" method="POST" onSubmit="addHiddenValue()">
+				<form action="updateRoom.do" method="POST" id='editRoomForm'>
+					<input type="hidden" name="method" id="method" value="update" />
 					<input type="hidden" name="addFriendList" id="addFriendList" value="dddd" />
 					<input type="hidden" name="removeFriendList" id="removeFriendList" value="dddd" />
 					<input type="hidden" name="room_id" value="<%=roomVO.getRoom_id()%>" />
@@ -143,10 +144,10 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
-						<button type="submit" class="btn"
+						<button type="button" class="btn" id="updateRoomBtn"
 							style="background-color: rgb(239, 137, 152);">수정하기</button>
-						<button type="submit" class="btn"
-							style="background-color: rgb(239, 137, 152);">삭제하기</button>
+						<button type="button" class="btn" id="deleteRoomBtn"
+							style="background-color: rgb(239, 137, 152);">방삭제하기</button>
 					</div>
 				</form>
 			</div>
@@ -413,7 +414,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    		const removeDiv=event.target.parentNode.parentNode;
    		const removeFriend=removeDiv.getAttribute('value');
    		
-   		var confirm_delete = confirm("❗"+removeFriend+"님을 정말 삭제하시겠습니까? ❗️");
+   		var confirm_delete = confirm("❗"+removeFriend+"님을 정말 방에서 내보내시겠습니까? ❗️");
 	    if(confirm_delete == true){
 	    	inviteList.removeChild(removeDiv);
 	   		if(addInvites.has(removeFriend)){
@@ -427,19 +428,33 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    		
    		
    	}
+ 	addFriendBtn.addEventListener('click',invite,false);
+   	//removeFriendBtn.addEventListener('click',removeFriend,false);
+   	$(document).on("click",".removeBtn",removeFriend);
+  	
+   	
   	///방 수정하기 전 hidden value에 넣기
-    function addHiddenValue() {
+    $('#updateRoomBtn').on('click', function() {
 
        var addlist = Array.from(addInvites);
        $("#addFriendList").val(addlist);
        var removelist = Array.from(removeInvites);
        $("#removeFriendList").val(removelist);
-    }
+       $('#editRoomForm').submit();
+    })
    	
-   	addFriendBtn.addEventListener('click',invite,false);
-   	//removeFriendBtn.addEventListener('click',removeFriend,false);
-   	$(document).on("click",".removeBtn",removeFriend);
-  	
+  
+   	
+   	//방삭제
+   	$('#deleteRoomBtn').on('click',function(){
+   		var confirm_delete = confirm("❗ 게시물이 모두 삭제됩니다. 정말 방을 삭제하시겠습니까? ❗️");
+   		if(confirm_delete){
+   			$("#method").val('delete');
+   			$('#editRoomForm').submit();
+   		}
+   		
+   		
+   	})
    	
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

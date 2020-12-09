@@ -18,8 +18,12 @@ public class MemberService {
 	}
 
 	//회원가입
-	public void addMember(MemberVO member) {
-		dao.addMember(member);
+	public boolean addMember(MemberVO member) {
+		if(dao.getUser(member.getUser_id())==null) {
+			dao.addMember(member);
+			return true;
+		}
+		return false;
 	}
 	
 	
@@ -55,4 +59,7 @@ public class MemberService {
 	}
 
 */
+	public void updateMember(MemberVO member) {
+		dao.updateMember(member);
+	}
 }

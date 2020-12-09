@@ -263,7 +263,7 @@ public class RoomDAO {
 		}
 	}
 	 
-	//방에 유저가 있는지 확인
+	//현재 방에 유저가 있는지 확인
 	public boolean checkUserInRoom(int room_id,String user_id) {
 		boolean isUserInRoom=false;
 		Connection conn = null;
@@ -273,6 +273,31 @@ public class RoomDAO {
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement("select * from ROOMUSER where room_id=? and user_id=? and use_yn='y'");
+			pstmt.setInt(1, room_id);
+			pstmt.setString(2, user_id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				isUserInRoom=true;
+			}
+
+		} catch (Exception ex) {
+			System.out.println("roomDAO->getRoom()오류 : " + ex);
+		
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return isUserInRoom;
+	}
+	public boolean checkUserExistsRoom(int room_id,String user_id) {
+		boolean isUserInRoom=false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select * from ROOMUSER where room_id=? and user_id=?");
 			pstmt.setInt(1, room_id);
 			pstmt.setString(2, user_id);
 			rs = pstmt.executeQuery();
@@ -311,7 +336,7 @@ public class RoomDAO {
 	}
 	
 	//방에서 유저 삭제
-	public void removeRoomUser(RoomVO room,List<String> userList,String user_id) {
+	public void removeRoomUser(int room_id,List<String> userList,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -321,7 +346,7 @@ public class RoomDAO {
 				pstmt = conn.prepareStatement("UPDATE ROOMUSER SET use_yn='n',modifier=?,modify_time=NOW() where room_id=? and user_id=?;");
 				
 				pstmt.setString(1, user_id);
-				pstmt.setInt(2, room.getRoom_id());
+				pstmt.setInt(2, room_id);
 				pstmt.setString(3, userList.get(i));
 				pstmt.executeUpdate();
 			}
@@ -332,5 +357,24 @@ public class RoomDAO {
 			close(conn, pstmt);
 		}
 	}
-
+	//방 삭제
+	public void deleteRoom(String user_id,int room_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE ROOMINFO SET use_yn='n',modifier=?,modify_time=NOW() where room_id=?;");
+					
+			pstmt.setString(1, user_id);
+			pstmt.setInt(2, room_id);
+			pstmt.executeUpdate();
+		
+				
+		} catch (Exception ex) {
+			System.out.println("RoomDAO-> removeRoomUser오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
 }

@@ -47,7 +47,7 @@ public class DeleteDiaryController  implements Controller {
 		diary.setDiary_id(diary_id);
 		
 		DiaryService diaryservice = DiaryService.getInstance();
-		diaryservice.delteDiary(diary,user_id);
+		diaryservice.deleteDiary(diary,user_id);
 		
 		PrintWriter writer =res.getWriter(); 
 		if(page.equals("main")) {
