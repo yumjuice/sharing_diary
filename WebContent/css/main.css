@@ -111,7 +111,7 @@ input{
       position:fixed;
       right:160px;
       background-color: white;
-      width:200px;
+      width: 250px;
       
       border-radius: 10px;
       
@@ -134,13 +134,14 @@ input{
   }
   .content_container{
     display:flex;
-    margin-bottom: 50px;
+    margin-bottom: 70px;
     flex-direction: column;
      transition: filter 0.3s ease-in;
     transform: scale(1.1);
     box-shadow:2px 2px 9px 0px;
     border-radius:10px;
-   
+    position: relative;
+    top: 18px;
   }
 
   .title{
@@ -191,4 +192,17 @@ input{
   }
   
  .hideBtn:focus { outline:none; }
+ 
+ 
+ .roomTitle{
+  display: inline-block;
+    margin-left: 5px;
+ }
+ 
+ .roomTitle>p{
+ display: table-cell;
+    vertical-align: middle;
+    height: 50px;
+    }
+    
   

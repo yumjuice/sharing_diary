@@ -23,8 +23,6 @@ public class CommentDAO {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
-			//Class.forName("com.mysql.cj.jdbc.Driver");
-	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
 			
 		} catch (Exception ex) {
 			System.out.println("오류발생: " + ex);

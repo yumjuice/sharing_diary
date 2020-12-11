@@ -1,4 +1,4 @@
-package controller;
+package controller.common;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

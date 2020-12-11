@@ -107,7 +107,7 @@ body{
   	width:30px;
   	height:30px;
   	position:relative;
-  	top:-5px;
+  	margin-left: 15px;
   }
 .modal-body>div{
 	position:absoulte;
@@ -120,11 +120,12 @@ input{
     border-radius:5px;
     border: solid 2px  rgb(239,137,152);
 }
-
+/*
 img {
-    width: 100%; /* need to overwrite inline dimensions */
+    width: 100%; /* need to overwrite inline dimensions 
     height: auto;
   }
+*/
 
   .grid-container {
     display: grid;
@@ -162,6 +163,7 @@ img {
   .description{
     font-size: 20px;
     font-weight: bold;
+    color:#524d4d;
   }
   
 .article-title {
@@ -226,4 +228,8 @@ img {
   a{
 	color:white;
 	text-decoration:none;
+}
+
+#addNewBtn:focus{
+	outline:none;
 }

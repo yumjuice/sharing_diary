@@ -40,9 +40,11 @@ int room_id=Integer.parseInt(request.getParameter("room_id"));
 
             <textarea name="context" style="margin:10px;" id="content" cols="40" rows="10" placeholder="내용을 입력해주세요"></textarea>
             <br>
-            <label>이미지 주소<input name='imgaddr' id='imgaddr' style="margin-left:10px;" type="text"></label>
-            <br>
-            <button onclick="addDate();" style="float: right;margin:10px;margin-right:60px" type="submit" id="write_btn">작성</button>
+            <div style="height: 70px;">
+            <label>이미지 주소<input name='imgaddr' id='imgaddr' style="margin-left:10px;display:inline" type="text"></label>
+            
+            <button onclick="addDate();" style="display:inline;float: right;height:50px;margin-right:60px" type="submit" id="write_btn">작성</button>
+        	</div>
         </div>
     </form>        
 </div>

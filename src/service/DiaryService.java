@@ -69,4 +69,9 @@ public class DiaryService {
 	public void deleteDiaryList(int room_id,String user_id) {
 		dao.deleteDiaryList(room_id,user_id);
 	}
+	
+	public ArrayList<DiaryVO> getLikeDiaryList(String user_id){
+		ArrayList<DiaryVO> list = dao.getLikeDiaryList(user_id);
+		return list;
+	}
 }

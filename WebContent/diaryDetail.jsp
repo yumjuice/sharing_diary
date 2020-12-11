@@ -89,7 +89,7 @@
 							style="margin-top: 15px;" class="user_img">
 						<p id="writer"
 							style="font-weight: bold; display: inline; margin-right: 10px; margin-left: 4px;"><%=writer_name%></p>
-						<img src="images/heart.png" class="heart_img" width=30 height=30
+						<img src="images/redbinheart.png" class="heart_img" width=30 height=30
 							style="margin-top: 15px;" value="empty_heart">
 
 					</div>
@@ -214,7 +214,7 @@
       			
 			} else {
 				heart_img.setAttribute('value', 'empty_heart')
-				heart_img.setAttribute('src', 'images/heart.png')
+				heart_img.setAttribute('src', 'images/redbinheart.png')
 				alert('좋아요를 삭제합니다!')
 				$.ajax({
      				url:'changelike.do?diary_id=<%=diary.getDiary_id()%>',

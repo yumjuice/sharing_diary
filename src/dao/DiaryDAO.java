@@ -23,8 +23,6 @@ public class DiaryDAO {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
-			//Class.forName("com.mysql.cj.jdbc.Driver");
-	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
 			
 		} catch (Exception ex) {
 			System.out.println("오류발생: " + ex);
@@ -107,7 +105,7 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select COUNT(*) from DIARY where DIARY.use_yn='y' AND room_id IN (select room_id from ROOMUSER WHERE user_id=?)");
+			pstmt = conn.prepareStatement("select COUNT(*) from DIARY where DIARY.use_yn='y' AND room_id IN (select room_id from ROOMUSER WHERE user_id=? and use_yn='y')");
 			pstmt.setString(1, user_id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -187,7 +185,7 @@ public class DiaryDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from DIARY inner join USER on USER.user_id=DIARY.writer_id inner join ROOMINFO on DIARY.room_id=ROOMINFO.room_id where DIARY.use_yn='y' AND DIARY.room_id in(select room_id from ROOMUSER WHERE user_id=?) order by DIARY.create_time desc LIMIT ?, 6;");
+			pstmt = conn.prepareStatement("select * from DIARY inner join USER on USER.user_id=DIARY.writer_id inner join ROOMINFO on DIARY.room_id=ROOMINFO.room_id where DIARY.use_yn='y' AND DIARY.room_id in(select room_id from ROOMUSER WHERE user_id=? and use_yn='y') order by DIARY.create_time desc LIMIT ?, 6;");
 			pstmt.setString(1, user_id);
 			pstmt.setInt(2, (page-1)*6);
 			rs = pstmt.executeQuery();
@@ -297,5 +295,43 @@ public class DiaryDAO {
 		} finally {
 			close(conn, pstmt);
 		}
+	}
+	
+	public ArrayList<DiaryVO> getLikeDiaryList(String user_id){
+		ArrayList<DiaryVO> list=new ArrayList<DiaryVO>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DiaryVO diary = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("SELECT * FROM ROOMINFO JOIN (SELECT * FROM USER JOIN (SELECT DIARY.diary_id,DIARY.room_id,DIARY.writer_id,DIARY.title,DIARY.feeling,DIARY.img,DIARY.context,DIARY.date FROM DIARY join (select * from it1452.LIKE where user_id=? and use_yn='y') as b on DIARY.diary_id=b.diary_id where DIARY.use_yn='y') AS C ON C.writer_id=USER.user_id) AS D ON D.room_id=ROOMINFO.room_id ORDER BY date desc;");
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				diary=new DiaryVO();
+				diary.setContext(rs.getString("context"));
+				diary.setDate(rs.getString("date"));
+				diary.setDiary_id(rs.getInt("diary_id"));
+				diary.setFeeling(rs.getString("feeling"));
+				diary.setImgaddr(rs.getString("img"));
+				diary.setRoom_id(rs.getInt("room_id"));
+				diary.setTitle(rs.getString("title"));
+				diary.setWriter_id(rs.getString("writer_id"));
+				diary.setRoom_name(rs.getString("room_name"));
+				diary.setWriter_name(rs.getString("user_name"));
+				
+				list.add(diary);
+				
+			}
+
+		} catch (Exception ex) {
+			System.out.println("DiaryDAO->getLikeDiaryList오류 : " + ex);
+		
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return list;
 	}
 }

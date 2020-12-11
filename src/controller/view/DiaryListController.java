@@ -1,4 +1,4 @@
-package controller;
+package controller.view;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controller.common.Controller;
+import controller.common.HttpUtil;
 import service.DiaryService;
 
 import vo.DiaryVO;
@@ -54,12 +56,21 @@ public class DiaryListController implements Controller {
 		    //다이어리 리스트ㅡ 반환
 		    ArrayList<DiaryVO> diaryList = diaryservice.getDiaryList(room_id);
 		    
+		    //좋아요한 다이어리리스트가져오기
+		    ArrayList<DiaryVO> likeDiaryList = diaryservice.getLikeDiaryList(user_id);
+		
+		    
 		    //참여중인 친구들리스트반환
 		    ArrayList<MemberVO> memberList=memberservice.memberList(room_id);
+		    
+		    //참여중인 방 목록
+		    ArrayList<RoomVO> roomList=roomservice.getRoomList(user_id);
 		    
 		    req.setAttribute("memberList", memberList);
 		    req.setAttribute("user", memberVO);
 		    req.setAttribute("diaryList", diaryList);
+		    req.setAttribute("likeDiaryList", likeDiaryList);
+		    req.setAttribute("roomList", roomList);
 		    req.setAttribute("room", roomVO);
 		    HttpUtil.forward(req, res, "/diaryList.jsp");
 		   

@@ -53,24 +53,30 @@ String room_name=roomVO.getRoom_name();
 ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberList");
 
 
+//ArrayList<DiaryVO> likeDiaryList=(ArrayList<DiaryVO>)request.getAttribute("likeDiaryList");
+
+
 %>
 <!-- 헤더 삽입 -->
 <%@ include file="header.jsp" %>
 
+
+<!-- 방 정보 -->
 <div class="header_container">
     <div class="box">
         <img class="profile" src="<%=roomVO.getRoom_img()%>">
     </div>
 
+	
 
     <div>
         <h1 id="roomName" style="display:inline;position:relative;top:10px;""><%=room_name %></h1>
         <button type="button" id="setting_btn" data-toggle="modal" data-target="#settingRoom">
-					<img src="images/plus1.png" width="25" height="25">
+					<img src="images/setting.png" width="25" height="25">
 		</button>
     
         <hr style="border-color:rgb(218, 134, 146); background-color:rgb(218, 134, 146)">
-        <span>
+        <span style="color:grey;">
             <%for (int i=0;i<user_list.size();i++){
                 %> <%=user_list.get(i).getUser_name() %> &nbsp;
 
@@ -97,7 +103,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
     </div>
 </div>
 
-<!-- Modal -->
+<!-- 방 수정 Modal -->
 	<div class="modal fade" id="settingRoom" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -109,7 +115,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form action="updateRoom.do" method="POST" id='editRoomForm'>
+				<form action="room.do" method="POST" id='editRoomForm'>
 					<input type="hidden" name="method" id="method" value="update" />
 					<input type="hidden" name="addFriendList" id="addFriendList" value="dddd" />
 					<input type="hidden" name="removeFriendList" id="removeFriendList" value="dddd" />
@@ -122,13 +128,13 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
 							<span>방 이미지 주소</span> <input type="text" name="room_img" value="<%=roomVO.getRoom_img()%>">
 						</div>
 						<div>
-							<span>친구 추가</span> <input type="text" id="friend"
+							<span>친구 추가</span> <input type="text" id="new_friend"
 								onFocus="this.value='';return true;">
-							<button type="button" class="hideBtn" id="addInvite">
+							<button type="button" class="hideBtn" id="addNewBtn">
 								<img src="images/plus1.png" style="width:25px;height:25px;">
 							</button>
 						</div>
-						<ol id="inviteList">
+						<ol id="newInviteList">
 							<%for (int i=0;i<user_list.size();i++){
 								if(roomVO.getMaster_id().equals(user_list.get(i).getUser_id()))
 									continue;
@@ -350,15 +356,15 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
     
     
     //*************방 수정하기 *************
-    const inviteList = document.querySelector("#inviteList");
-    const addFriendBtn = document.querySelector("#addInvite");
+    const newInviteList = document.querySelector("#newInviteList");
+    const addFriendBtn = document.querySelector("#addNewBtn");
    	///const removeFriendBtns= document.querySelectorAll(".removeBtn");
    	
    	var addInvites = new Set();
    	var removeInvites=new Set();
    	
    	//친구추가
-   	function addFriend(friend){
+   	function addNewFriend(friend){
    	//var friend = document.querySelector("#friend")
         var li = document.createElement('li');
         var div = document.createElement('div');
@@ -381,25 +387,25 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
         div.appendChild(li);
         div.appendChild(button);
 
-        inviteList.appendChild(div);
+        newInviteList.appendChild(div);
         addInvites.add(friend);
    	
    		
    	}
    	
    	//추가버튼클릭시
-    function invite(){
-   	 var friend = document.querySelector("#friend")
+    function inviteNewFriend(){
+   	var new_friend = document.querySelector("#new_friend")
    	 
    	 //아이디가 존재하는지 확인
    	 $.ajax({
-           url: 'checkuser.do?id=' + friend.value,
+           url: 'checkuser.do?id=' + new_friend.value,
            type: 'get',
            success: function(result) {
         	   console.log("result",result);
                if(result==true){
-               	addFriend(friend.value);
-               	friend.setAttribute('value', "")
+               	addNewFriend(new_friend.value);
+               	new_friend.setAttribute('value', "")
                }else{
                	alert("유효하지 않은 아이디입니다.");
                }
@@ -416,7 +422,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    		
    		var confirm_delete = confirm("❗"+removeFriend+"님을 정말 방에서 내보내시겠습니까? ❗️");
 	    if(confirm_delete == true){
-	    	inviteList.removeChild(removeDiv);
+	    	newInviteList.removeChild(removeDiv);
 	   		if(addInvites.has(removeFriend)){
 	   			addInvites.delete(removeFriend);	
 	   		}else{
@@ -428,7 +434,7 @@ ArrayList<MemberVO> user_list=(ArrayList<MemberVO>)request.getAttribute("memberL
    		
    		
    	}
- 	addFriendBtn.addEventListener('click',invite,false);
+ 	addFriendBtn.addEventListener('click',inviteNewFriend,false);
    	//removeFriendBtn.addEventListener('click',removeFriend,false);
    	$(document).on("click",".removeBtn",removeFriend);
   	

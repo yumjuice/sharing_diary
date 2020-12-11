@@ -4,7 +4,7 @@
   
   <servlet>
 		<servlet-name>front</servlet-name>
-		<servlet-class>controller.FrontController</servlet-class>
+		<servlet-class>controller.common.FrontController</servlet-class>
 		<init-param>
 			<param-name>charset</param-name>
 			<param-value>UTF-8</param-value>

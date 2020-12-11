@@ -1,4 +1,4 @@
-package controller;
+package controller.logic;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import controller.common.Controller;
 import service.LikeService;
 
 public class ChangeLikeController implements Controller {

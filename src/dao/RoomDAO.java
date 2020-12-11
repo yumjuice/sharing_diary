@@ -23,8 +23,6 @@ public class RoomDAO {
 	public Connection connect() {
 		Connection conn = null;
 		try {
-			//Class.forName("com.mysql.cj.jdbc.Driver");
-	        //conn = DriverManager.getConnection("jdbc:mysql://192.168.1.159:3306/sharingdb?serverTimezone=UTC", "1234", "1234");
 			Class.forName("org.mariadb.jdbc.Driver");
 	        conn = DriverManager.getConnection("jdbc:mariadb://gsitm-intern2020.c5tdqadv8vmd.ap-northeast-2.rds.amazonaws.com/it1452", "it1452", "it1452");
 			
@@ -73,7 +71,7 @@ public class RoomDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select * from ROOMINFO where use_yn='y' AND room_id in(select room_id from ROOMUSER where user_id=?)");
+			pstmt = conn.prepareStatement("select * from ROOMINFO where use_yn='y' AND room_id in(select room_id from ROOMUSER where user_id=? and use_yn='y')");
 			pstmt.setString(1,user_id);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -189,11 +187,12 @@ public class RoomDAO {
 		
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("UPDATE ROOMINFO SET room_name=? ,room_img=?, modifier=?,modify_time=NOW();");
+			pstmt = conn.prepareStatement("UPDATE ROOMINFO SET room_name=? ,room_img=?, modifier=?,modify_time=NOW() where room_id=?;");
 			
 			pstmt.setString(1, room.getRoom_name());
 			pstmt.setString(2, room.getRoom_img());
 			pstmt.setString(3, user_id);
+			pstmt.setInt(4, room.getRoom_id());
 			pstmt.executeUpdate();
 			
 		} catch (Exception ex) {
@@ -230,14 +229,14 @@ public class RoomDAO {
 			}
 			
 		} catch (Exception ex) {
-			System.out.println("RoomDAO-> addRoomUser오류 : " + ex);
+			//System.out.println("RoomDAO-> addRoomUser오류 : " + ex);
 		} finally {
 			close(conn, pstmt);
 		}
 	}
 	
 	
-	//이미 만들어진 방에 참여자들만 추가
+	//이미 만들어진 방에 새로운 참여자들 추가
 	public void addUser(RoomVO room,List<String> userList,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -257,7 +256,7 @@ public class RoomDAO {
 			}
 				
 		} catch (Exception ex) {
-			System.out.println("RoomDAO-> addRoomUser오류 : " + ex);
+			///System.out.println("RoomDAO-> addUser오류 : " + ex);
 		} finally {
 			close(conn, pstmt);
 		}
@@ -281,7 +280,7 @@ public class RoomDAO {
 			}
 
 		} catch (Exception ex) {
-			System.out.println("roomDAO->getRoom()오류 : " + ex);
+			System.out.println("roomDAO->checkUserInRoom()오류 : " + ex);
 		
 		} finally {
 			close(conn, pstmt, rs);
@@ -289,6 +288,8 @@ public class RoomDAO {
 		
 		return isUserInRoom;
 	}
+	
+	//유저가 해당 방에 존재했었는지 여부
 	public boolean checkUserExistsRoom(int room_id,String user_id) {
 		boolean isUserInRoom=false;
 		Connection conn = null;
@@ -306,7 +307,7 @@ public class RoomDAO {
 			}
 
 		} catch (Exception ex) {
-			System.out.println("roomDAO->getRoom()오류 : " + ex);
+			System.out.println("roomDAO->checkUserExistsRoom()오류 : " + ex);
 		
 		} finally {
 			close(conn, pstmt, rs);
@@ -335,7 +336,7 @@ public class RoomDAO {
 		}
 	}
 	
-	//방에서 유저 삭제
+	//방 삭제 --> 방에참여하는 유저모두 삭제
 	public void removeRoomUser(int room_id,List<String> userList,String user_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -375,6 +376,76 @@ public class RoomDAO {
 		} finally {
 			close(conn, pstmt);
 		}
+	}
+	
+	//방탈퇴
+	public void deleteRoomUser(String user_id,int room_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("UPDATE ROOMUSER SET use_yn='n',modifier=?,modify_time=NOW() where room_id=? and user_id=?;");
+					
+			pstmt.setString(1, user_id);
+			pstmt.setInt(2, room_id);
+			pstmt.setString(3, user_id);
+			pstmt.executeUpdate();
+		
+				
+		} catch (Exception ex) {
+			System.out.println("RoomDAO-> deleteRoomUser오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	public void updateMaster(int room_id,String user_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("update ROOMINFO set master_id= (Select user_id from ROOMUSER WHERE room_id=? and user_id <> ? and create_time= (select min(create_time) from ROOMUSER where use_yn='y' and user_id<>? group by room_id having room_id=?) and use_yn='y'  LIMIT 1), modify_time=NOW(), modifier=? where room_id=?;");
+					
+			pstmt.setInt(1, room_id);
+			pstmt.setString(2, user_id);
+			pstmt.setString(3, user_id);
+			pstmt.setInt(4, room_id);
+			pstmt.setString(5, user_id);
+			pstmt.setInt(6, room_id);
+			pstmt.executeUpdate();
+		
+				
+		} catch (Exception ex) {
+			System.out.println("RoomDAO-> updateMaster오류 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	public int getCountOfParti(int room_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count=0;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select count(*) from ROOMUSER WHERE	room_id=? and use_yn='y';");
+			pstmt.setInt(1, room_id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				count=rs.getInt(1);
+				
+			}
+
+		} catch (Exception ex) {
+			System.out.println("roomDAO->getCountOfParti()오류 : " + ex);
+		
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return count;
 	}
 	
 }

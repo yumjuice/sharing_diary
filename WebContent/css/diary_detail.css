@@ -76,6 +76,9 @@ body{
 }
 .comment-list{
     flex:4;
+    overflow: auto;
+
+    margin-bottom: 20px;
 }
 .comment-write{
     flex:1;

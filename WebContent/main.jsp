@@ -23,8 +23,8 @@
 
 
 
-	<%
-	//main.do에서 유저, 다이어리 정보,  방정보 받기
+<%
+//main.do에서 유저, 다이어리 정보,  방정보 받기
 
 	//무한스크롤시 스크롤할때마다 getPage.do 에서 json데이터 받기
 	//////*****초기화
@@ -34,158 +34,123 @@
 	String user_name = userVO.getUser_name();
 
 	//참여중인 Room객체 리스트 반환
-	ArrayList<RoomVO> room_list = (ArrayList<RoomVO>) request.getAttribute("roomList");
+	//ArrayList<RoomVO> room_list = (ArrayList<RoomVO>) request.getAttribute("roomList");
 
 	//첫페이지다이어리리스트
 	ArrayList<DiaryVO> diary_list = (ArrayList<DiaryVO>) request.getAttribute("diaryList");
-
+//	ArrayList<DiaryVO> likeDiaryList=(ArrayList<DiaryVO>) request.getAttribute("likeDiaryList");
 	//총 페이지 수
 	int total_page = (int) request.getAttribute("pageNum");
 	%>
-	<!-- 헤더 삽입 -->
-	<%@ include file="header.jsp"%>
+<!-- 헤더 삽입 -->
+<%@ include file="header.jsp"%>
 
 
-	<div class="body-container">
-		<div class="diary_list">
-			<%
-				if (total_page >= 1) {
+<div class="body-container">
+    <!--- 다이어리 리스트--->
+    <div class="diary_list">
+      <%
+		if (total_page >= 1) {
+			for (int i = 0; i < diary_list.size(); i++) {
+				DiaryVO diary = diary_list.get(i);
+				
+				String feeling = diary.getFeeling();
+				switch (feeling) {
+					case "happy" :
+						feeling = "😄";
+						break;
+					case "sad" :
+						feeling = "😭";
+						break;
+					case "mad" :
+						feeling = "🤬";
+						break;
+					case "surprise" :
+						feeling = "😨";
+						break;
+				}%>
 
-					for (int i = 0; i < diary_list.size(); i++) {
-						//유저 객체 가져오기
-						DiaryVO diary = diary_list.get(i);
-						//방 객체 가져오기
-						String feeling = diary.getFeeling();
-						switch (feeling) {
-							case "happy" :
-								feeling = "😄";
-								break;
-							case "sad" :
-								feeling = "😭";
-								break;
-			
-							case "mad" :
-								feeling = "🤬";
-								break;
-							case "surprise" :
-								feeling = "😨";
-								break;
-						}%>
-			
-						<div class="content_container">
-							<div class="title">
-								<p class="title_text">
-									🏠<%=diary.getRoom_name()%>🏠 &nbsp;<%=diary.getWriter_name()%></p>
-							</div>
-			
-							<div class="diary-container">
-								<div class="img">
-									<img src="<%=diary.getImgaddr()%>">
-								</div>
-								<div class="diary" onclick="submitDiaryDetail('<%=diary.getDiary_id()%>')">
-									<form action="diarydetail.do" method="POST" id="<%=diary.getDiary_id()%>">
-										<input type="hidden" name="diary_id" value="<%=diary.getDiary_id()%>"/> 
-										<input type="hidden" name="room_id" value="<%=diary.getRoom_id()%>"/> 
-										<input type="hidden" name="page" value="main"/>
-									</form>
-									<h3 class="title_text">
-										<%=diary.getTitle()%></h3>
-									<p class="sub_title_text"><%=diary.getDate()%>
-										&nbsp;
-										<%=feeling%></p>
-									<p class="context"><%=diary.getContext()%></p>
-			
-			
-								</div>
-							</div>
-						</div>
-					
-				     <%}
-					}%>
-			
+	       <div class="content_container">
+	            <div class="title">
+	                <p class="title_text">
+	                    🏠<%=diary.getRoom_name()%>🏠 &nbsp;<%=diary.getWriter_name()%></p>
+	            </div>
+	
+	            <div class="diary-container">
+	                <div class="img">
+	                    <img src="<%=diary.getImgaddr()%>">
+	                </div>
+	                <div class="diary" onclick="submitDiaryDetail('<%=diary.getDiary_id()%>')">
+	                    <form action="diarydetail.do" method="POST" id="<%=diary.getDiary_id()%>">
+	                        <input type="hidden" name="diary_id" value="<%=diary.getDiary_id()%>" />
+	                        <input type="hidden" name="room_id" value="<%=diary.getRoom_id()%>" />
+	                        <input type="hidden" name="page" value="main" />
+	                    </form>
+	                    <h3 class="title_text">
+	                        <%=diary.getTitle()%></h3>
+	                    <p class="sub_title_text"><%=diary.getDate()%>
+	                        &nbsp;
+	                        <%=feeling%></p>
+	                    <p class="context"><%=diary.getContext()%></p>
+	
+	
+	                </div>
+	            </div>
+	        </div>
+
+        	<%}
+		}%>
 
 
 
-		</div>
 
-		<div class="room-container">
-			<div style="margin-top:10px;">
-				<p id="room_name" style="display:inline;">
-					❤️<%=user_name%>님의 방❤️
-				</p>
-				<button type="button" id="plus_btn" data-toggle="modal"
-					data-target="#makeRoom">
-					<img src="images/plus1.png" width="25" height="25">
-				</button>
-			</div>
-			<hr style="margin-bottom: 10px;">
-			
-			<%
+    </div>
+    <!--- 방 리스트--->
+    <div class="room-container">
+        <div style="margin-top:10px;">
+            <p id="room_name" style="display:inline;">
+                ❤️<%=user_name%>님의 방❤️
+            </p>
+
+        </div>
+        <hr style="margin-bottom: 10px;">
+
+        <%
 				for (int i = 0; i < room_list.size(); i++) {
 			%>
 
-			<div style="cursor: pointer;"
-				onclick="location.href='diaryList.do?roomId=<%=room_list.get(i).getRoom_id()%>'">
-				<%if (room_list.get(i).getMaster_id().equals(userVO.getUser_id())){ %>
-					<img class="room_img" src="images/fullheart.png">
-				<%}else{%> 
-					<img class="room_img" src="images/Icon_Self_Line.png">
-				<%} %>
-				<span><%=room_list.get(i).getRoom_name()%></span>
+        <div style="cursor: pointer;" onclick="location.href='diaryList.do?roomId=<%=room_list.get(i).getRoom_id()%>'">
+            <%if (room_list.get(i).getMaster_id().equals(userVO.getUser_id())){ %>
+            
+            <%}%>
+         
+            
+            
+            <div class="roomImg">
+            
+            	<img src="<%=room_list.get(i).getRoom_img()%>">
+            </div>
+            
+            <div class="roomTitle">
+            <p><%=room_list.get(i).getRoom_name()%> 
+            	<%if (room_list.get(i).getMaster_id().equals(userVO.getUser_id())){ %> 👑 <%}%>
+            </p>
+            </div>
 
-			</div>
+        </div>
 
-			<%}%>
+        <%}%>
 
-		</div>
-	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="makeRoom" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">방 추가하기</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<form action="addRoom.do" method="POST" onSubmit="check()">
-					<input type="hidden" name="inviteList" id="hiddenList" value="dddd" />
-					<div class="modal-body">
-						<div>
-							<span>방 이름</span> <input type="text" name="room_name">
-						</div>
-						<div>
-							<span>방 이미지 주소</span> <input type="text" name="room_img">
-						</div>
-						<div>
-							<span>친구 추가</span> <input type="text" id="friend"
-								onFocus="this.value='';return true;">
-							<button type="button" class="hideBtn" id="addInvite">
-								<img src="images/plus1.png" width="25" height="25">
-							</button>
-						</div>
-						<ol id="inviteList">
-						</ol>
-
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
-						<button type="submit" class="btn"
-							style="background-color: rgb(239, 137, 152);">방 만들기</button>
-					</div>
-				</form>
-			</div>
 		</div>
 	</div>
 <script>
     const diary_list_container = document.querySelector(".diary_list")
-    //이미지 추가 함수
+    
+    
+    //다이어리 추가
     function add_diary(room_id, roomname, diary_id, nickname, imgaddr, feeling, date, title1, context) {
-        switch (feeling) {
+        
+    	switch (feeling) {
             case "happy":
                 feeling = "😄";
                 break;
@@ -285,8 +250,6 @@
     }
 
     window.addEventListener('scroll', function() {
-        //console.log(window.scrollY, document.documentElement.scrollTop);
-        //console.log (document.body.scrollTop,document.body.scrollHeight,document.documentElement.clientHeight);
         if (document.body.scrollTop + 100 >= document.body.scrollHeight - document.documentElement.clientHeight || window.scrollY + 100 >= document.body.scrollHeight - document.documentElement.clientHeight) {
             if (!loading) //실행 가능 상태라면?
             {
@@ -299,68 +262,11 @@
         }
     });
 
-
-    const inviteList = document.querySelector("#inviteList");
-    const addBtn = document.querySelector("#addInvite");
-    var invites = new Set();
-
-    function addFriend(friend) {
-        //var friend = document.querySelector("#friend")
-        var li = document.createElement('li');
-        var div = document.createElement('div');
-        //<button type="button" id="addInvite"><img src="images/plus1.png" width="25" height="25"></button>
-        var button = document.createElement('button');
-        var img = document.createElement('img');
-
-        
-        button.classList.add("removeBtn");
-        button.setAttribute('type', 'button');
-        li.innerHTML = friend;
-        li.setAttribute('value', friend);
-        li.setAttribute('style', 'display:inline;');
-        img.setAttribute('src', "images/back.png");
-        img.setAttribute('width', '15');
-        img.setAttribute('height', '15');
-
-
-        button.appendChild(img);
-        div.appendChild(li);
-        div.appendChild(button);
-
-        inviteList.appendChild(div);
-        invites.add(friend);
-
-
-    }
-    function invite(){
-    	 var friend = document.querySelector("#friend")
-    	 //아이디가 존재하는지 확인
-    	 $.ajax({
-            url: 'checkuser.do?id=' + friend.value,
-            type: 'get',
-            success: function(result) {
-                if(result==true){
-                	addFriend(friend.value);
-                	friend.setAttribute('value', "")
-                }else{
-                	alert("유효하지 않은 아이디입니다.");
-                }
-            }
-        })
-    	 
-    }
-    addBtn.addEventListener('click', invite);
-
-    ///방 추가하기 전 hidden value에 넣기
-    function check() {
-
-        var list = Array.from(invites);
-        ///alert(list+typeof(list));
-        //document.getElementById("inviteList").setAttribute('value',list);
-
-        $("#hiddenList").val(list);
-    }
-
+    
+    
+    //***********************
+  
+   ///상세다이어리로 이동
     function submitDiaryDetail(id) {
         $("#" + id).submit();
     }

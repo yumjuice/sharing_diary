@@ -1,4 +1,4 @@
-package controller;
+package controller.view;
 
 import java.io.IOException;
 
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import controller.HttpUtil;
 import service.MemberService;
 import vo.MemberVO;
 import service.DiaryService;
@@ -18,6 +17,9 @@ import vo.DiaryVO;
 import service.RoomService;
 import vo.RoomVO;
 import com.google.gson.*;
+
+import controller.common.Controller;
+import controller.common.HttpUtil;
 
 public class MainPageController implements Controller {
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -61,8 +63,8 @@ public class MainPageController implements Controller {
 	    int pageNum=diaryservice.getPageNum(user_id);
 	    
 	    ArrayList<DiaryVO> diaryList = diaryservice.getDiaryPage(page,user_id);
-	    
-	    
+	    //좋아요한 다이어리리스트가져오기
+	    ArrayList<DiaryVO> likeDiaryList = diaryservice.getLikeDiaryList(user_id);
 	    
 	    //방 정보 가져오기
 	    RoomService roomservice=RoomService.getInstance();
@@ -71,6 +73,7 @@ public class MainPageController implements Controller {
 	    req.setAttribute("roomList", roomList);
 	    req.setAttribute("user", memberVO);
 	    req.setAttribute("diaryList", diaryList);
+	    req.setAttribute("likeDiaryList", likeDiaryList);
 	    req.setAttribute("pageNum", pageNum);
 		HttpUtil.forward(req, res, "/main.jsp");
 		

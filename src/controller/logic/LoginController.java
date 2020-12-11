@@ -1,4 +1,4 @@
-package controller;
+package controller.logic;
 
 import java.io.IOException;
 
@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import controller.HttpUtil;
+import controller.common.Controller;
+import controller.common.HttpUtil;
 import service.MemberService;
 
 public class LoginController implements Controller {

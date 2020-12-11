@@ -1,10 +1,29 @@
-package controller;
+package controller.common;
 
 import java.io.*;
 
 
+
+
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import controller.logic.AddCommentController;
+import controller.logic.ChangeLikeController;
+import controller.logic.DeleteDiaryController;
+import controller.logic.DiaryWriteController;
+import controller.logic.EditDiaryController;
+import controller.logic.IdCheckController;
+import controller.logic.LoginController;
+import controller.logic.RoomController;
+
+
+import controller.logic.UserController;
+import controller.view.DiaryDetailController;
+import controller.view.DiaryListController;
+import controller.view.EditPageController;
+import controller.view.MainPageController;
+
 import java.util.*;
 
 public class FrontController extends HttpServlet {
@@ -25,9 +44,8 @@ public class FrontController extends HttpServlet {
 		list.put("/login.do", new LoginController());
 		list.put("/main.do", new MainPageController());
 		list.put("/diaryList.do", new DiaryListController());
-		list.put("/addRoom.do", new AddRoomController());
-		
-		//list.put("/user.do", new JoinController());
+		list.put("/room.do", new RoomController());
+	
 		list.put("/writediary.do", new DiaryWriteController());
 		list.put("/diarydetail.do",new DiaryDetailController());
 		list.put("/deletediary.do", new DeleteDiaryController());
@@ -36,7 +54,7 @@ public class FrontController extends HttpServlet {
 		list.put("/editdiary.do", new EditPageController());
 		list.put("/updatediary.do", new EditDiaryController());
 		list.put("/checkuser.do",new IdCheckController());
-		list.put("/updateRoom.do",new UpdateRoomController());
+		//list.put("/updateRoom.do",new UpdateRoomController());
 		list.put("/user.do",new UserController());
 	}
 

@@ -51,13 +51,17 @@ public class RoomService {
 				newFriendList.add(addFriendList.get(i));
 			}
 		}
-		if(!newFriendList.isEmpty()) {
-		dao.addUser(room,newFriendList, user_id);
-		System.out.println("newFriendList");
-		System.out.println(newFriendList);}
-		if(!removeFriendList.isEmpty()) {
+		if(newFriendList.size()>=1) {
+			System.out.println("size"+newFriendList.size());
+			System.out.println("newFriendList");
+			System.out.println(newFriendList);
+			dao.addUser(room,newFriendList, user_id);
+			
+		}
+		if(removeFriendList.size()>=1) {
 			System.out.println("rmoveFriendlist"+removeFriendList);
-			dao.removeRoomUser(room.getRoom_id(),removeFriendList,user_id);	}
+			dao.removeRoomUser(room.getRoom_id(),removeFriendList,user_id);	
+		}
 	}
 		
 	//방에 해당 유저가 참여하는지 확인
@@ -75,5 +79,23 @@ public class RoomService {
 		}
 		dao.removeRoomUser(room_id, userList, user_id);
 
+	}
+	
+	//방 탈퇴
+	public void deleteRoomUser(String user_id,int room_id) {
+		String master_id=dao.getRoom(room_id).getMaster_id();
+		//방에 참여자가 본인 한명이라면
+		int count=dao.getCountOfParti(room_id);
+		if(count==1) {
+			dao.deleteRoomUser(user_id,room_id);
+		}
+		//탈퇴한 사람이 방장이라면 가장 먼저 추가된 사람에게 방장 이관
+		else if(master_id.equals(user_id)) {
+			
+			dao.updateMaster(room_id, user_id);
+			dao.deleteRoomUser(user_id,room_id);
+		}
+		else dao.deleteRoomUser(user_id,room_id);
+		
 	}
 }
